@@ -31,6 +31,8 @@ This document tracks the initialization, scaffolding, and ongoing development of
 - [x] **Cloudflare Edge Presence:** Write the `api/presence.ts` worker script for zero-cost room matchmaking and peer signaling.
 - [ ] **Supabase Schema:** Define the initial PostgreSQL tables for pilot/player clearance, leaderboards, and cloud saves.
 
-### 4. Game Applications
-- [ ] **Web Gateway Companion (PWA):** Scaffold the Vite + Tailwind mobile frontend that acts as the smartphone HOTAS / controller interface.
-- [ ] **Game Client 01:** Initialize the first Godot 4.x project directory inside `/apps/` to begin testing the pipeline end-to-end.
+### 4. Game Production Pipeline (The 3 Confirmed Titles)
+- [x] **Web Gateway Companion (PWA):** Deployed live on Cloudflare Pages (`https://web-gateway.truyensboris.workers.dev`) with router, transparent brand assets, and mobile viewport support.
+- [ ] **Game Client 01 &rarr; `Astro-Smash: Arena` (Web F2P):** 3v3 physics brawler using Magnus curve aerodynamics, vehicle thrusters, and 60Hz WebRTC DataChannels.
+- [ ] **Game Client 02 &rarr; `Orbit Runner: Gyro Dash` (Mobile F2P):** 6-DOF endless vertical flight dodger using physical phone gyro fusion (`controller.js`) and daily chest drops.
+- [ ] **Game Client 03 &rarr; `Vanguard: The Outer War` (AAA Premium):** 32v32 space combat simulator in Unreal Engine 5 with CAD asset pipeline (`cad_to_mesh.py`) and Founder cross-game prestige.

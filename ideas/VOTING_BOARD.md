@@ -13,7 +13,7 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
 - [ ] **1A. "Void Syndicate: Auto-Tactics"**
   - *Concept:* Asynchronous auto-battler. Draft a squad of mercenaries to fight in background tournaments.
   - *Synergy:* High daily retention. Players log in to open mercenary card packs and set defenses.
-- [ ] **1B. "Astro-Smash: Arena"**
+- [x] 🏆 **1B. "Astro-Smash: Arena" [OFFICIAL WINNER - WEB F2P]**
   - *Concept:* Fast 3v3 physics brawler (top-down Rocket League) using advanced aerodynamics. 
   - *Synergy:* Highly competitive, monetized via cosmetic goal explosions and striker skins.
 - [ ] **1C. "Drift Miners"**
@@ -40,7 +40,7 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
 - [ ] **2A. "Neon Protocol: Tactical Gacha"**
   - *Concept:* High-fidelity, turn-based squad RPG. Collect and upgrade cyber-operatives.
   - *Synergy:* The main driver for the lootbox and card pack economy. Deep character customization.
-- [ ] **2B. "Orbit Runner: Gyro Dash"**
+- [x] 🏆 **2B. "Orbit Runner: Gyro Dash" [OFFICIAL WINNER - MOBILE F2P]**
   - *Concept:* Endless vertical flight obstacle dodger using physical phone gyro-sensors.
   - *Synergy:* High replayability. Hard currency (Diamonds) revives players for longer runs and higher leaderboard spots.
 - [ ] **2C. "Outpost Command"**
@@ -64,7 +64,7 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
 *Core: Unreal Engine 5 | Monetization: Premium Base Price ($20-$40) + Cross-Game Cosmetics*
 
 ### Batch 1: The Originals
-- [ ] **3A. "Vanguard: The Outer War"**
+- [x] 🏆 **3A. "Vanguard: The Outer War" [OFFICIAL WINNER - AAA PREMIUM]**
   - *Concept:* Cinematic 6-DOF space dogfighting simulator. Huge 32v32 fleet battles.
   - *Synergy:* Purchasing the game grants "Elite Status", unlocking huge diamond stipends and exclusive skins across the web/mobile ecosystem.
 - [ ] **3B. "Syndicate: Extraction"**
