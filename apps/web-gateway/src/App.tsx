@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Games from './pages/Games';
 import TechMatrix from './pages/TechMatrix';
+import About from './pages/About';
+import Controller from './pages/Controller';
+import Press from './pages/Press';
 
 export default function App() {
   return (
@@ -16,6 +19,9 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/games" element={<Games />} />
             <Route path="/tech" element={<TechMatrix />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/controller" element={<Controller />} />
+            <Route path="/press" element={<Press />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

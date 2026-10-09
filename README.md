@@ -55,9 +55,9 @@ studio-monorepo/
 ├── package.json               # 📦 Monorepo workspace configuration
 │
 ├── apps/                      # 🚀 Deployable Applications
-│   ├── web-gateway/           # 🌐 React + Vite + Tailwind PWA Studio Portal (Cloudflare Pages)
+│   ├── web-gateway/           # 🌐 React + Vite + Tailwind PWA Studio Portal (Live on Cloudflare)
 │   ├── edge-workers/          # ⚡ Cloudflare Edge presence & room matchmaking
-│   └── game-client-01/        # 🎮 (Upcoming) Primary Godot 4.x game client
+│   └── game-client-01/        # 🎮 Astro-Smash: Arena (Godot 4.7 WebGL client)
 │
 ├── packages/                  # 🧱 Shared Libraries
 │   └── shared-network/        # 📡 WebRTC DataChannels, PeerJS & binary frame packing
@@ -67,14 +67,17 @@ studio-monorepo/
 │   └── asset-pipeline/        # 🎨 CAD-to-Mesh Python scripts (Fusion 360 -> Blender -> Godot/UE5)
 │
 ├── ideas/                     # 💡 Studio Brain & Voting Board (18 Pitch Candidates)
-│   └── VOTING_BOARD.md        # 🗳️ Team pitch voting registry
+│   └── VOTING_BOARD.md        # 🗳️ Team pitch voting registry (Official winners locked)
 │
 └── docs/                      # 📚 Studio Documentation & Brand Registry
     ├── assets/                # 🖼️ Transparent SVG and PNG logos, marks, and badges
+    ├── astro_smash_arena_architecture.md # 🎮 Game Client 01 Godot 4.7 specifications
     ├── brand_guidelines.md    # 🎨 Tachyon visual identity & color system
     ├── company_structure_and_prompts.md # 🏢 Org hierarchy, file ownership & starter prompts
+    ├── press_kit.md           # 📰 Fact sheet, executive boilerplate & media assets
     ├── relic_reusability_matrix.md      # 🧩 Code reuse audit from Pong & Vanguard
     ├── revenue_strategy.md    # 💰 Cross-game economy & monetization model
+    ├── technical_architecture.md        # 📐 Zero-cost edge networking topology & sequence flows
     └── toolchain_integration_guide.md # 🛠️ SOPs for Fusion 360, Blender, Godot & UE5
 ```
 

@@ -1,35 +1,25 @@
-import { Terminal, FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-obsidian py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-4 md:mb-0">
-          <p className="text-gray-500 font-mono text-sm">
-            © {new Date().getFullYear()} SynthMesh Interactive. All rights reserved.
-          </p>
-          <p className="text-gray-600 font-mono text-xs mt-1">
-            Powered by Cloudflare Edge & WebRTC.
-          </p>
+    <footer className="border-t border-slate-800/80 bg-black/60 py-10 px-6 sm:px-12 text-xs font-mono text-slate-500">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-3">
+          <img src="/tachyon_mark.svg" alt="Tachyon Mark" className="w-6 h-6 opacity-75" />
+          <span className="text-slate-300 font-bold tracking-widest text-sm">TACHYON STUDIOS</span>
         </div>
-        
-        <div className="flex space-x-6">
-          <a 
-            href="https://github.com/synthmesh" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-gray-400 hover:text-white transition-colors flex items-center space-x-2"
-          >
-            <Terminal size={18} />
-            <span className="font-mono text-sm">Source</span>
-          </a>
-          <a 
-            href="/docs" 
-            className="text-gray-400 hover:text-white transition-colors flex items-center space-x-2"
-          >
-            <FileText size={18} />
-            <span className="font-mono text-sm">Docs</span>
-          </a>
+
+        <div className="flex flex-wrap items-center justify-center gap-6 text-[11px] uppercase tracking-wider text-slate-400">
+          <Link to="/games" className="hover:text-neon-cyan transition-colors">Games</Link>
+          <Link to="/tech" className="hover:text-neon-cyan transition-colors">Tech Matrix</Link>
+          <Link to="/controller" className="hover:text-neon-cyan transition-colors">Mobile HOTAS</Link>
+          <Link to="/about" className="hover:text-neon-cyan transition-colors">Manifesto</Link>
+          <Link to="/press" className="hover:text-neon-cyan transition-colors">Press Kit</Link>
+          <a href="https://github.com/bokk3/studio-monorepo" target="_blank" rel="noreferrer" className="text-neon-cyan hover:underline">GitHub</a>
+        </div>
+
+        <div className="text-center md:text-right text-[10px] text-slate-500">
+          Zero-Royalty Engine Architecture &bull; Edge Matchmaking &copy; 2026 Tachyon Studios
         </div>
       </div>
     </footer>
