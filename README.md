@@ -72,6 +72,7 @@ studio-monorepo/
 └── docs/                      # 📚 Studio Documentation & Brand Registry
     ├── assets/                # 🖼️ Transparent SVG and PNG logos, marks, and badges
     ├── brand_guidelines.md    # 🎨 Tachyon visual identity & color system
+    ├── company_structure_and_prompts.md # 🏢 Org hierarchy, file ownership & starter prompts
     ├── revenue_strategy.md    # 💰 Cross-game economy & monetization model
     └── toolchain_integration_guide.md # 🛠️ SOPs for Fusion 360, Blender, Godot & UE5
 ```

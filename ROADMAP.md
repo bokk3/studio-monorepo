@@ -8,6 +8,8 @@ This document tracks the initialization, scaffolding, and ongoing development of
 - [x] **Monorepo Scaffolding:** Initialized the directory structure (`apps/`, `packages/`, `scripts/`, `docs/`) separating logic across the studio.
 - [x] **Workspace Configuration:** Root `package.json` with npm workspaces configured, plus the core `README.md`.
 - [x] **Agent Rulebook (`AGENTS.md`):** Defined the strict tech boundaries, networking philosophies (WebRTC/Edge), and automated testing mandates for all AI agents.
+- [x] **Company Structure & Starter Prompts:** Formalized department hierarchy, file ownership matrix, and ready-to-use starter prompts in `docs/company_structure_and_prompts.md`.
+- [x] **Lead Gameplay Engineer Appointed:** Onboarded dedicated Godot 4.x & deterministic physics specialist subagent.
 - [x] **Shared Networking Package:** Scaffolded the `@studio/shared-network` package boilerplate.
 - [x] **Toolchain Integration Guide:** Documented the exact pipelines for collaborating across Fusion 360, Blender (headless), Godot 4.x, and Unreal Engine 5.
 
