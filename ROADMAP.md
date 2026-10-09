@@ -10,6 +10,7 @@ This document tracks the initialization, scaffolding, and ongoing development of
 - [x] **Agent Rulebook (`AGENTS.md`):** Defined the strict tech boundaries, networking philosophies (WebRTC/Edge), and automated testing mandates for all AI agents.
 - [x] **Company Structure & Starter Prompts:** Formalized department hierarchy, file ownership matrix, and ready-to-use starter prompts in `docs/company_structure_and_prompts.md`.
 - [x] **Lead Gameplay Engineer Appointed:** Onboarded dedicated Godot 4.x & deterministic physics specialist subagent.
+- [x] **Relic Codebase Audit Completed:** Cataloged all reusable physics, networking, CAD, and UI assets from Pong and Vanguard in `docs/relic_reusability_matrix.md`.
 - [x] **Shared Networking Package:** Scaffolded the `@studio/shared-network` package boilerplate.
 - [x] **Toolchain Integration Guide:** Documented the exact pipelines for collaborating across Fusion 360, Blender (headless), Godot 4.x, and Unreal Engine 5.
 
