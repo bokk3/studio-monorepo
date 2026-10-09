@@ -24,6 +24,10 @@ These rules apply to all applications and scripts created inside `/apps`, `/pack
 ## 4. Asset Pipeline, Geometry & Visual Formats
 - **Procedural Generation:** Prefer mathematical/procedural meshes (NURBS, CAD lofting, Three.js algorithmic generation) over traditional polygon modeling.
 - **Mandatory Transparent Formats (SVG / PNG):** All logos, brand marks, HUD icons, UI widgets, and graphic assets MUST be authored strictly in transparent vector (**SVG**) or transparent 32-bit RGBA (**PNG**). NEVER generate or commit opaque JPEG bounding boxes for UI or logos.
+- **Unified Substrate, Separate Signatures:** All games and UI elements share the **Void Obsidian (`#121212`)** dark matter substrate and **Fusion White (`#FFFFFF`)** reticle telemetry, but MUST maintain distinct signature accents:
+  - *Astro-Smash: Arena (Web):* **Aero Cyan (`#00F3FF`)** + Velocity Mint (`#00FFB2`).
+  - *Orbit Runner: Gyro Dash (Mobile):* **Pulse Magenta (`#FF00FF`)** + Ultraviolet (`#9D00FF`).
+  - *Vanguard: The Outer War (AAA):* **Tactical Cobalt (`#0055FF`)** + Solar Amber Gold (`#FFB800`).
 - **LOD Scripts:** If creating Python or Node asset scripts (inside `/scripts/asset-pipeline`), automate the generation of multiple LODs and collision hulls for performance.
 
 ## 5. Mobile Companion Integration

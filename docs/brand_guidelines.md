@@ -70,19 +70,36 @@ Transparent hexagonal badges representing our 3 unified game platforms:
 
 ---
 
-## 4. Color Palette Specifications
+## 4. Color Palette Specifications: "Separate Identities, United Ecosystem"
 
-The Tachyon aesthetic is **Hyper-Modern / Neon Sci-Fi**, utilizing deep dark obsidian backdrops punctuated by high-radiance neon energy lines:
+Our titles share a common dark matter substrate so they feel interconnected across the Tachyon universe, while each maintaining a distinctive signature accent palette for instant brand recognition:
 
-```
-[ Obsidian ]     #121212  -  Primary Backdrop & Dark Canvas
-[ Neon Cyan ]    #00F3FF  -  Core Brand Accent, Primary WebRTC Streams, Holographic HUD
-[ Electric Blue] #0055FF  -  Secondary Gradient Anchor, Aerodynamic Wings, Deep Physics
-[ Neon Magenta ] #FF00FF  -  Energy Discharges, Critical Alerts, Founder Perks
-[ Crisp White ]  #FFFFFF  -  Fusion Core Diamonds, High-Priority Reticles
-```
+### 4.1 The Shared Studio Anchor (The Unity)
+Every game in the Tachyon ecosystem shares this dark-canvas substrate:
+*   **Void Obsidian (`#0B0D11` / `#121212`):** Primary canvas, zero-light space backdrop.
+*   **HUD Framework Slate (`#1E293B` / `#334155`):** Structural borders, telemetry dividers, grid lines.
+*   **Fusion White (`#FFFFFF`):** Ball core, reticle focal center, high-contrast critical warnings.
 
----
+### 4.2 Title-Specific Color Signatures (The Separation)
+
+#### 🌐 Title 1: Astro-Smash: Arena (Web F2P)
+*Aesthetic: Holographic Sports, Aerodynamic Airflow, High-Velocity Velocity Lines*
+*   **Primary Signature:** **Aero Cyan (`#00F3FF`)** — Dynamic Magnus curve trails, goal vortexes.
+*   **Secondary Accent:** **Velocity Mint (`#00FFB2`)** — Stamina meters, boost pads, positive score feedback.
+*   **Tertiary Accent:** **Deep Ion Blue (`#0055FF`)** — Stadium perimeter barriers, defensive zones.
+
+#### 📱 Title 2: Orbit Runner: Gyro Dash (Mobile F2P)
+*Aesthetic: Kinetic Reflex, Cybernetic Arcade, Vertical Overdrive*
+*   **Primary Signature:** **Pulse Magenta (`#FF00FF` / `#FF007F`)** — Mobile ship hull trims, speed barriers.
+*   **Secondary Accent:** **Ultraviolet (`#9D00FF`)** — Gyro sensor tilt arcs, dangerous cosmic debris.
+*   **Tertiary Accent:** **Neon Coral (`#FF3366`)** — Near-miss multipliers, haptic vibration warnings.
+
+#### 💻 Title 3: Vanguard: The Outer War (AAA Premium)
+*Aesthetic: Hard-Surface Military Aerospace, Deep Space Naval Tactical, Founder Prestige*
+*   **Primary Signature:** **Tactical Cobalt (`#0055FF` / `#1A66FF`)** — Interceptor engine exhausts, shield deflectors.
+*   **Secondary Accent:** **Solar Amber Gold (`#FFB800` / `#FFA000`)** — LCOS missile lock pips, Founder badges.
+*   **Tertiary Accent:** **Titanium Ice (`#D0E4FF`)** — Cockpit structural frames, CAD hull panel highlights.
+
 
 ## 5. Typography
 
