@@ -1,103 +1,119 @@
-# 🚀 Antigravity AI-Assisted Game Studio
+<p align="center">
+  <img src="docs/assets/tachyon_banner.svg" alt="Tachyon Studio Banner" width="100%" />
+</p>
 
-Welcome to the central monorepo for our AI-assisted, human-directed game development studio. 
+<p align="center">
+  <strong>Human-Directed. AI-Accelerated. Zero-Friction Multiplayer.</strong>
+</p>
 
-This repository serves as the single source of truth for all game clients, web gateways, serverless edge APIs, and AI automation scripts. By combining human creativity with autonomous AI pipelines, we can develop AA and AAA titles with zero-friction multiplayer, device-agnostic controls, and heavily optimized asset pipelines.
-
----
-
-## 📖 Table of Contents
-1. [Core Philosophy](#-core-philosophy)
-2. [Repository Architecture](#-repository-architecture)
-3. [Getting Started (Developers & AI)](#-getting-started)
-4. [The AI Rulebook (`AGENTS.md`)](#-the-ai-rulebook)
-5. [Toolchain Integration](#-toolchain-integration)
-6. [Roadmap & Tracking](#-roadmap--tracking)
+<p align="center">
+  <a href="#-the-tachyon-ecosystem"><img src="https://img.shields.io/badge/Ecosystem-Web%20%7C%20Mobile%20%7C%20AAA-00F3FF?style=for-the-badge" alt="Ecosystem" /></a>
+  <a href="#-core-architecture"><img src="https://img.shields.io/badge/Networking-WebRTC%20P2P%20%2B%20Edge-FF00FF?style=for-the-badge" alt="Networking" /></a>
+  <a href="#-license--open-source"><img src="https://img.shields.io/badge/Engine-Godot%204%20%7C%20UE5-0055FF?style=for-the-badge" alt="Engine" /></a>
+</p>
 
 ---
 
-## 🧠 Core Philosophy
-Our games are built on four foundational pillars:
-- **Zero-Cost Scalability:** We utilize Cloudflare Edge Workers and WebRTC DataChannels for multiplayer. Our central servers handle matchmaking and presence; all physics and real-time state are arbitrated peer-to-peer.
-- **Hardware Agnosticism:** We eliminate the need for expensive hardware (like HOTAS setups) by utilizing PWAs, smartphone gyroscope sensor fusion, and lightweight computer-vision webcam tracking.
-- **Open-Source & Web-Native:** Primary development is driven through Godot 4.x and Three.js (WebGL).
-- **Procedural Asset Generation:** We design parametric models (NURBS) in Autodesk Fusion 360 and rely on AI-driven Blender scripts to mathematically generate LODs, collision hulls, and normal maps.
+## ⚡ Welcome to Tachyon Studios
+
+**Tachyon** is an AI-assisted game development studio engineering the next generation of seamless, cross-platform multiplayer titles. By pairing open-source game engines (Godot 4, Three.js) and high-end cinematic engines (Unreal Engine 5) with serverless edge computing and WebRTC peer-to-peer data channels, we eliminate server hosting costs and physical controller barriers forever.
+
+---
+
+## 🎨 Transparent Brand Assets & Visual Identity
+
+All official studio marks are maintained strictly in **100% transparent vector (SVG)** and **32-bit RGBA (PNG)** formats:
+
+- **Full Vector Logo:** [`docs/assets/tachyon_logo_full.svg`](docs/assets/tachyon_logo_full.svg) | [PNG](docs/assets/tachyon_logo_full.png)
+- **Primary Emblem:** [`docs/assets/tachyon_mark.svg`](docs/assets/tachyon_mark.svg) | [PNG](docs/assets/tachyon_mark.png)
+- **Studio Banner:** [`docs/assets/tachyon_banner.svg`](docs/assets/tachyon_banner.svg)
+- **Category Badges:** [Web F2P](docs/assets/tachyon_icon_web.svg) · [Mobile F2P](docs/assets/tachyon_icon_mobile.svg) · [AAA Premium](docs/assets/tachyon_icon_aaa.svg)
+- **Brand Book:** Read the complete [Tachyon Brand Guidelines](docs/brand_guidelines.md).
+
+---
+
+## 🎮 The Tachyon Ecosystem (3 Unified Titles)
+
+All titles share a unified **Supabase Player Profile** with cross-game progression, hard currency (*Diamonds*), and cosmetic rewards:
+
+1. **🌐 Web-Based F2P:** Zero-install 3D browser games running at locked 60Hz over WebRTC DataChannels (e.g. *Astro-Smash: Arena*).
+2. **📱 Mobile F2P:** Installable iOS/Android experiences utilizing physical phone gyroscope sensor fusion as high-precision 6-DOF controllers (e.g. *Orbit Runner: Gyro Dash*).
+3. **💻 AAA Steam & Console:** Cinematic Unreal Engine 5 titles (e.g. *Vanguard: The Outer War*). Purchasing grants exclusive *Founder Prestige* and cross-game pet/skin unlocks across the Web and Mobile titles.
+
+Read the full [Monetary Optimization & Revenue Strategy](docs/revenue_strategy.md) for detailed LTV and tokenomics.
 
 ---
 
 ## 🏗️ Repository Architecture
-This is an NPM Workspace monorepo. Shared code and specific applications are isolated into their own domains.
+
+This monorepo uses **NPM Workspaces** to share libraries and coordinate builds:
 
 ```text
 studio-monorepo/
-├── AGENTS.md                  # 🤖 The strict technical rulebook for all AI agents
-├── ROADMAP.md                 # 🗺️ Current studio development progress and pending tasks
-├── package.json               # 📦 Root workspace configuration
+├── AGENTS.md                  # 🤖 AI Agent operational rules & guidelines
+├── ROADMAP.md                 # 🗺️ Live task tracker and engineering milestones
+├── package.json               # 📦 Monorepo workspace configuration
 │
-├── ideas/                     # 💡 Sandboxed idea board, game pitches, and WIP devlogs
-│
-├── apps/                      # 🎮 Deployable Applications
-│   ├── edge-workers/          # Serverless matchmaking & presence (Cloudflare TS)
-│   ├── web-gateway/           # (Planned) Mobile PWA controller & companion app
-│   └── game-client-01/        # (Planned) Core Godot 4.x or Three.js projects
+├── apps/                      # 🚀 Deployable Applications
+│   ├── web-gateway/           # 🌐 React + Vite + Tailwind PWA Studio Portal (Cloudflare Pages)
+│   ├── edge-workers/          # ⚡ Cloudflare Edge presence & room matchmaking
+│   └── game-client-01/        # 🎮 (Upcoming) Primary Godot 4.x game client
 │
 ├── packages/                  # 🧱 Shared Libraries
-│   └── shared-network/        # WebRTC, UDP discovery, and binary payload packing
+│   └── shared-network/        # 📡 WebRTC DataChannels, PeerJS & binary frame packing
 │
-├── scripts/                   # ⚙️ AI Automation & Tooling
-│   ├── ai-pipelines/          # Prompts, headless testing triggers, math copilots
-│   └── asset-pipeline/        # Python/Node CAD-to-Mesh conversion scripts
+├── scripts/                   # ⚙️ Autonomous AI Tooling
+│   ├── ai-pipelines/          # 🧠 Headless testing harnesses & copilot prompts
+│   └── asset-pipeline/        # 🎨 CAD-to-Mesh Python scripts (Fusion 360 -> Blender -> Godot/UE5)
 │
-└── docs/                      # 📚 Studio Documentation
-    └── toolchain_integration_guide.md # SOPs for Fusion 360, Blender, Godot, and UE5
+├── ideas/                     # 💡 Studio Brain & Voting Board (18 Pitch Candidates)
+│   └── VOTING_BOARD.md        # 🗳️ Team pitch voting registry
+│
+└── docs/                      # 📚 Studio Documentation & Brand Registry
+    ├── assets/                # 🖼️ Transparent SVG and PNG logos, marks, and badges
+    ├── brand_guidelines.md    # 🎨 Tachyon visual identity & color system
+    ├── revenue_strategy.md    # 💰 Cross-game economy & monetization model
+    └── toolchain_integration_guide.md # 🛠️ SOPs for Fusion 360, Blender, Godot & UE5
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quickstart: Web Gateway Portal
 
-### 1. Prerequisites
-- **Node.js** (v18+)
-- **Godot 4.x** (Configured in your system PATH for CLI headless testing)
-- **Blender 4.0+** (Configured in your system PATH for headless Python processing)
-- **Wrangler CLI** (For deploying Cloudflare Edge workers)
+The Tachyon Studio Web Gateway is built with **Vite, React 19, and Tailwind CSS v4** and deploys instantly to **Cloudflare Pages**:
 
-### 2. Installation
-Clone the repository and install all workspace dependencies:
 ```bash
-git clone https://github.com/your-org/studio-monorepo.git
+# Clone the repository
+git clone https://github.com/bokk3/studio-monorepo.git
 cd studio-monorepo
-npm install
-```
 
-### 3. Running Edge Matchmaking Locally
-```bash
-cd apps/edge-workers
+# Install dependencies across all workspaces
+npm install
+
+# Start the Web Gateway locally
+cd apps/web-gateway
 npm run dev
+
+# Or build for production
+npm run build
 ```
 
 ---
 
 ## 🤖 The AI Rulebook (`AGENTS.md`)
-This repository heavily utilizes the **Antigravity Customization System**. 
 
-At the root of the repo is an `AGENTS.md` file. **You do not need to configure anything.** Simply by opening this repository in your terminal or IDE, your local AI agents will instantly absorb this file. 
+This repository is designed for collaborative pair-programming between humans and autonomous AI agents using the **Antigravity Customization System**.
 
-The rulebook restricts the AI from proposing expensive server architecture, enforces the WebRTC/P2P paradigms, and strictly mandates that the AI must write headless automated test suites (Godot CLI) for any physics or networking logic it generates. If you change a studio standard, simply commit the change to `AGENTS.md` and the entire team's AI will update automatically upon pulling.
-
----
-
-## 🛠️ Toolchain Integration
-Our asset pipeline flows from Mechanical CAD to real-time engine without manual box-modeling.
-
-1. **Design:** Create models in Autodesk Fusion 360 (or OpenSCAD).
-2. **Bridge:** The AI invokes `scripts/asset-pipeline/cad_to_mesh.py` via Blender headless.
-3. **Deploy:** The bridge outputs engine-ready `.GLTF` (for Godot/Web) or `.FBX` (for Unreal Engine).
-
-For highly detailed standard operating procedures, see the [Toolchain Integration Guide](docs/toolchain_integration_guide.md).
+Opening this repository in your IDE or CLI automatically mounts [`AGENTS.md`](AGENTS.md). The AI is governed by strict technical guardrails:
+- Mandatory headless QA test generation (`godot --headless`) for all physics and netcode.
+- Zero-cost serverless edge deployment on Cloudflare (no stateful AWS/Node servers).
+- Strict Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`).
+- **Mandatory transparent formats (SVG / PNG)** for all visual assets.
 
 ---
 
-## 🗺️ Roadmap & Tracking
-We track all immediate, short-term, and long-term studio tasks internally. 
-Please refer to the [ROADMAP.md](ROADMAP.md) file to see what the AI and the engineering team are currently building next!
+## 📄 License & Open-Source Foundation
+
+- Engine core powered by [Godot Engine](https://godotengine.org/) (MIT) and [Three.js](https://threejs.org/) (MIT).
+- Cloud services powered by [Cloudflare Pages](https://pages.cloudflare.com/) and [Supabase](https://supabase.com/).
+- Studio intellectual property & game code &copy; 2026 Tachyon Studios.

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <filter id="tachyon-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur1" />
+      <feGaussianBlur stdDeviation="18" result="blur2" />
+      <feGaussianBlur stdDeviation="32" result="blur3" />
+      <feMerge>
+        <feMergeNode in="blur3" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <linearGradient id="grad-cyan-magenta" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F3FF" />
+      <stop offset="50%" stop-color="#0055FF" />
+      <stop offset="100%" stop-color="#FF00FF" />
+    </linearGradient>
+
+    <linearGradient id="grad-wing-left" x1="0%" y1="0%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#00F3FF" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0055FF" stop-opacity="0.3" />
+    </linearGradient>
+
+    <linearGradient id="grad-wing-right" x1="100%" y1="0%" x2="0%" y2="50%">
+      <stop offset="0%" stop-color="#FF00FF" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0055FF" stop-opacity="0.3" />
+    </linearGradient>
+
+    <linearGradient id="core-glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#00F3FF" />
+      <stop offset="100%" stop-color="#0055FF" />
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient Orbit Rings & Circuit Trace Nodes (Transparent Vector) -->
+  <g opacity="0.6">
+    <circle cx="256" cy="256" r="210" fill="none" stroke="#00F3FF" stroke-width="1.5" stroke-dasharray="16 12 4 12" opacity="0.4" />
+    <circle cx="256" cy="256" r="170" fill="none" stroke="#FF00FF" stroke-width="1.2" stroke-dasharray="32 20 8 20" opacity="0.35" />
+    <circle cx="256" cy="256" r="120" fill="none" stroke="#0055FF" stroke-width="1" stroke-dasharray="8 8" opacity="0.5" />
+    
+    <!-- Coordinate Nodes -->
+    <circle cx="256" cy="46" r="3" fill="#00F3FF" filter="url(#tachyon-glow)" />
+    <circle cx="256" cy="466" r="3" fill="#FF00FF" filter="url(#tachyon-glow)" />
+    <circle cx="46" cy="256" r="3" fill="#00F3FF" filter="url(#tachyon-glow)" />
+    <circle cx="466" cy="256" r="3" fill="#FF00FF" filter="url(#tachyon-glow)" />
+  </g>
+
+  <!-- The Tachyon Geometric Monogram (T) -->
+  <g filter="url(#tachyon-glow)">
+    <!-- Upper Wing Left -->
+    <path d="M72 136 L240 136 L216 184 L120 184 L88 232 L40 232 Z" 
+          fill="url(#grad-wing-left)" stroke="#00F3FF" stroke-width="2" stroke-linejoin="round" />
+    
+    <!-- Upper Wing Right -->
+    <path d="M440 136 L272 136 L296 184 L392 184 L424 232 L472 232 Z" 
+          fill="url(#grad-wing-right)" stroke="#FF00FF" stroke-width="2" stroke-linejoin="round" />
+
+    <!-- Center Crest Cap -->
+    <polygon points="256,92 316,140 256,168 196,140" 
+             fill="url(#core-glow)" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" />
+
+    <!-- Vertical Tachyon Accelerators (Twin Stems) -->
+    <path d="M228 176 L248 176 L248 376 L224 432 L208 432 L228 356 Z" 
+          fill="url(#grad-cyan-magenta)" stroke="#00F3FF" stroke-width="1.8" stroke-linejoin="round" />
+    <path d="M284 176 L264 176 L264 376 L288 432 L304 432 L284 356 Z" 
+          fill="url(#grad-cyan-magenta)" stroke="#FF00FF" stroke-width="1.8" stroke-linejoin="round" />
+
+    <!-- Core Fusion Diamond (Center) -->
+    <polygon points="256,204 286,256 256,308 226,256" 
+             fill="#FFFFFF" opacity="0.95" />
+    <polygon points="256,216 276,256 256,296 236,256" 
+             fill="url(#grad-cyan-magenta)" />
+
+    <!-- Particle Trajectory Energy Spikes -->
+    <line x1="256" y1="100" x2="256" y2="40" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" />
+    <line x1="256" y1="316" x2="256" y2="460" stroke="#00F3FF" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="16 8" />
+    
+    <!-- Lateral Energy Fins -->
+    <polyline points="150,210 180,240 180,290 140,330" fill="none" stroke="#00F3FF" stroke-width="2" opacity="0.75" />
+    <polyline points="362,210 332,240 332,290 372,330" fill="none" stroke="#FF00FF" stroke-width="2" opacity="0.75" />
+  </g>
+</svg>

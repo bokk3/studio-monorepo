@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 360" width="100%" height="100%">
+  <defs>
+    <filter id="banner-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur1" />
+      <feGaussianBlur stdDeviation="20" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <linearGradient id="cyber-grid-h" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F3FF" stop-opacity="0" />
+      <stop offset="25%" stop-color="#00F3FF" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#0055FF" stop-opacity="0.5" />
+      <stop offset="75%" stop-color="#FF00FF" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#FF00FF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="beam-left" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F3FF" stop-opacity="0" />
+      <stop offset="50%" stop-color="#00F3FF" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#0055FF" stop-opacity="0.1" />
+    </linearGradient>
+
+    <linearGradient id="beam-right" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#FF00FF" stop-opacity="0" />
+      <stop offset="50%" stop-color="#FF00FF" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#0055FF" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Transparent Vector Background with Glowing Perspectives & Wireframes -->
+  <g opacity="0.45">
+    <!-- Perspective Grid (Vanishing to center X:700, Y:180) -->
+    <line x1="100" y1="20" x2="680" y2="175" stroke="#00F3FF" stroke-width="0.8" opacity="0.3" />
+    <line x1="200" y1="10" x2="685" y2="178" stroke="#00F3FF" stroke-width="0.8" opacity="0.3" />
+    <line x1="1300" y1="20" x2="720" y2="175" stroke="#FF00FF" stroke-width="0.8" opacity="0.3" />
+    <line x1="1200" y1="10" x2="715" y2="178" stroke="#FF00FF" stroke-width="0.8" opacity="0.3" />
+    <line x1="100" y1="340" x2="680" y2="185" stroke="#0055FF" stroke-width="0.8" opacity="0.3" />
+    <line x1="1300" y1="340" x2="720" y2="185" stroke="#0055FF" stroke-width="0.8" opacity="0.3" />
+
+    <!-- Horizontal Scanner Beams -->
+    <line x1="40" y1="180" x2="1360" y2="180" stroke="url(#cyber-grid-h)" stroke-width="1.5" />
+    <line x1="140" y1="90" x2="1260" y2="90" stroke="url(#cyber-grid-h)" stroke-width="0.8" opacity="0.5" />
+    <line x1="140" y1="270" x2="1260" y2="270" stroke="url(#cyber-grid-h)" stroke-width="0.8" opacity="0.5" />
+
+    <!-- Corner Framing HUD Brackets -->
+    <path d="M 60 70 L 60 40 L 120 40" fill="none" stroke="#00F3FF" stroke-width="2" />
+    <path d="M 1340 70 L 1340 40 L 1280 40" fill="none" stroke="#FF00FF" stroke-width="2" />
+    <path d="M 60 290 L 60 320 L 120 320" fill="none" stroke="#00F3FF" stroke-width="2" />
+    <path d="M 1340 290 L 1340 320 L 1280 320" fill="none" stroke="#FF00FF" stroke-width="2" />
+  </g>
+
+  <!-- Left Side: Particle Accelerator Vectors -->
+  <line x1="80" y1="176" x2="420" y2="176" stroke="url(#beam-left)" stroke-width="3" filter="url(#banner-glow)" />
+  <circle cx="420" cy="176" r="4" fill="#00F3FF" filter="url(#banner-glow)" />
+
+  <!-- Right Side: Particle Accelerator Vectors -->
+  <line x1="1320" y1="176" x2="980" y2="176" stroke="url(#beam-right)" stroke-width="3" filter="url(#banner-glow)" />
+  <circle cx="980" cy="176" r="4" fill="#FF00FF" filter="url(#banner-glow)" />
+
+  <!-- Center Tachyon Insignia & Brand Lockup -->
+  <g transform="translate(430, 20)">
+    <!-- Ambient Ring -->
+    <circle cx="270" cy="130" r="110" fill="none" stroke="#00F3FF" stroke-width="1.2" stroke-dasharray="12 8 3 8" opacity="0.4" />
+    <circle cx="270" cy="130" r="85" fill="none" stroke="#FF00FF" stroke-width="1" stroke-dasharray="20 12" opacity="0.35" />
+
+    <!-- The Geometric Emblem -->
+    <g filter="url(#banner-glow)">
+      <!-- Left Wing -->
+      <path d="M190 85 L260 85 L248 105 L208 105 L196 125 L174 125 Z" fill="#00F3FF" opacity="0.85" />
+      <!-- Right Wing -->
+      <path d="M350 85 L280 85 L292 105 L332 105 L344 125 L366 125 Z" fill="#FF00FF" opacity="0.85" />
+      <!-- Crest Top -->
+      <polygon points="270,65 296,86 270,98 244,86" fill="#FFFFFF" />
+      <!-- Twin Stems -->
+      <path d="M258 102 L266 102 L266 182 L254 205 L246 205 L258 172 Z" fill="#00F3FF" />
+      <path d="M282 102 L274 102 L274 182 L286 205 L294 205 L282 172 Z" fill="#FF00FF" />
+      <!-- Diamond Core -->
+      <polygon points="270,114 282,135 270,156 258,135" fill="#FFFFFF" />
+    </g>
+
+    <!-- Typography: TACHYON -->
+    <g transform="translate(270, 248)" text-anchor="middle" filter="url(#banner-glow)">
+      <text font-family="'Inter', 'Segoe UI', system-ui, sans-serif" font-size="34" font-weight="900" letter-spacing="14" fill="#FFFFFF">
+        TACHYON
+      </text>
+    </g>
+    
+    <!-- Subtitle -->
+    <g transform="translate(270, 276)" text-anchor="middle">
+      <text font-family="'Inter', 'Segoe UI', system-ui, sans-serif" font-size="12" font-weight="600" letter-spacing="6" fill="#00F3FF">
+        AI-DIRECTED GAME STUDIO // ZERO-FRICTION MULTIPLAYER
+      </text>
+    </g>
+
+    <!-- Lower Status Indicators -->
+    <g transform="translate(190, 302)">
+      <circle cx="0" cy="0" r="3" fill="#00F3FF" filter="url(#banner-glow)" />
+      <text x="10" y="4" font-family="monospace" font-size="9" fill="#88A0B8" letter-spacing="2">EDGELOBBY: 60HZ</text>
+      
+      <circle cx="105" cy="0" r="3" fill="#0055FF" filter="url(#banner-glow)" />
+      <text x="115" y="4" font-family="monospace" font-size="9" fill="#88A0B8" letter-spacing="2">WEBRTC: P2P</text>
+
+      <circle cx="205" cy="0" r="3" fill="#FF00FF" filter="url(#banner-glow)" />
+      <text x="215" y="4" font-family="monospace" font-size="9" fill="#88A0B8" letter-spacing="2">CAD-TO-MESH: ACTIVE</text>
+    </g>
+  </g>
+</svg>

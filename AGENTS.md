@@ -21,8 +21,9 @@ These rules apply to all applications and scripts created inside `/apps`, `/pack
 - **Godot Tests:** Execute Godot tests using CLI: `godot --headless --path <project> -s <test_script.gd>`.
 - **Target Metrics:** Validate deterministic physics, avoid garbage collection stutter in Three.js (e.g., use `BufferGeometry` and pre-allocate vertices), and ensure tests catch race conditions.
 
-## 4. Asset Pipeline & Geometry
+## 4. Asset Pipeline, Geometry & Visual Formats
 - **Procedural Generation:** Prefer mathematical/procedural meshes (NURBS, CAD lofting, Three.js algorithmic generation) over traditional polygon modeling.
+- **Mandatory Transparent Formats (SVG / PNG):** All logos, brand marks, HUD icons, UI widgets, and graphic assets MUST be authored strictly in transparent vector (**SVG**) or transparent 32-bit RGBA (**PNG**). NEVER generate or commit opaque JPEG bounding boxes for UI or logos.
 - **LOD Scripts:** If creating Python or Node asset scripts (inside `/scripts/asset-pipeline`), automate the generation of multiple LODs and collision hulls for performance.
 
 ## 5. Mobile Companion Integration
