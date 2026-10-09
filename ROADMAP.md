@@ -16,16 +16,16 @@ This document tracks the initialization, scaffolding, and ongoing development of
 ## 🚧 Pending (What We Need To Build)
 
 ### 1. Automation & AI Pipelines
-- [ ] **Blender Headless Bridge (`cad_to_mesh.py`):** Write the Python script that AI agents will use to convert `.STEP` files from Fusion 360 into Godot-ready `.GLTF` files (including LODs and normal baking).
+- [x] **Blender Headless Bridge (`cad_to_mesh.py`):** Write the Python script that AI agents will use to convert `.STEP` files from Fusion 360 into Godot-ready `.GLTF` files (including LODs and normal baking).
 - [ ] **Godot Headless QA Generator:** Create the prompt templates or Python tools the AI will use to automatically spin up `godot --headless` test suites when new logic is committed.
 - [ ] **Unreal Engine 5 Python Commandlets:** Draft the basic `ue5_import.py` for automated Datasmith processing in preparation for AAA development.
 
 ### 2. Core Libraries
-- [ ] **Flesh out `@studio/shared-network`:** Implement the actual WebRTC DataChannel handshake logic, local UDP discovery, and binary frame packing structs.
+- [x] **Flesh out `@studio/shared-network`:** Implement the actual WebRTC DataChannel handshake logic, local UDP discovery, and binary frame packing structs.
 - [ ] **Math & Physics Copilot:** Implement reusable math libraries for Magnus effect aerodynamics, 6-DOF gyroscopic offsets, and trajectory intersection (LCOS).
 
 ### 3. Backend & Cloud
-- [ ] **Cloudflare Edge Presence:** Write the `api/presence.ts` worker script for zero-cost room matchmaking and peer signaling.
+- [x] **Cloudflare Edge Presence:** Write the `api/presence.ts` worker script for zero-cost room matchmaking and peer signaling.
 - [ ] **Supabase Schema:** Define the initial PostgreSQL tables for pilot/player clearance, leaderboards, and cloud saves.
 
 ### 4. Game Applications
