@@ -1,0 +1,36 @@
+# Node
+node_modules/
+dist/
+build/
+.env
+
+# Godot 4
+.godot/
+*.translation
+export_presets.cfg
+
+# Blender & 3D Assets
+*.blend1
+*.blend2
+*.crash
+*.bmesh
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Unreal Engine
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.VC.db
+*.opensdf
+*.opendb
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace

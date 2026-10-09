@@ -1,0 +1,11 @@
+{
+  "name": "@studio/shared-network",
+  "version": "1.0.0",
+  "description": "Shared networking utilities (WebRTC, WebSockets, UDP) for studio projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antigravity AI Engineering",
+  "license": "UNLICENSED"
+}
