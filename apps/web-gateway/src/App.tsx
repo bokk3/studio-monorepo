@@ -1,14 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import Games from './pages/Games';
+import TechMatrix from './pages/TechMatrix';
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div className="flex flex-col min-h-screen bg-obsidian text-white font-sans antialiased">
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/tech" element={<TechMatrix />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 }

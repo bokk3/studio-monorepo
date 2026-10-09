@@ -25,7 +25,7 @@ This document tracks the initialization, scaffolding, and ongoing development of
 
 ### 2. Core Libraries
 - [x] **Flesh out `@studio/shared-network`:** Implement the actual WebRTC DataChannel handshake logic, local UDP discovery, and binary frame packing structs.
-- [ ] **Math & Physics Copilot:** Implement reusable math libraries for Magnus effect aerodynamics, 6-DOF gyroscopic offsets, and trajectory intersection (LCOS).
+- [x] **Math & Physics Core:** Implement reusable math libraries for Magnus effect aerodynamics, quadratic drag, 6-DOF gyroscopic dynamics, and predictive trajectory intersection (LCOS).
 
 ### 3. Backend & Cloud
 - [x] **Cloudflare Edge Presence:** Write the `api/presence.ts` worker script for zero-cost room matchmaking and peer signaling.
@@ -33,6 +33,6 @@ This document tracks the initialization, scaffolding, and ongoing development of
 
 ### 4. Game Production Pipeline (The 3 Confirmed Titles)
 - [x] **Web Gateway Companion (PWA):** Deployed live on Cloudflare Pages (`https://web-gateway.truyensboris.workers.dev`) with router, transparent brand assets, and mobile viewport support.
-- [ ] **Game Client 01 &rarr; `Astro-Smash: Arena` (Web F2P):** 3v3 physics brawler using Magnus curve aerodynamics, vehicle thrusters, and 60Hz WebRTC DataChannels.
+- [x] **Game Client 01 &rarr; `Astro-Smash: Arena` (Web F2P):** 3v3 physics brawler in Godot 4.7.2 with Magnus curve aerodynamics, 6-DOF vehicle dynamics, LCOS targeting, 16-byte binary protocol codec, and 7 automated headless test suites (100% pass rate).
 - [ ] **Game Client 02 &rarr; `Orbit Runner: Gyro Dash` (Mobile F2P):** 6-DOF endless vertical flight dodger using physical phone gyro fusion (`controller.js`) and daily chest drops.
 - [ ] **Game Client 03 &rarr; `Vanguard: The Outer War` (AAA Premium):** 32v32 space combat simulator in Unreal Engine 5 with CAD asset pipeline (`cad_to_mesh.py`) and Founder cross-game prestige.

@@ -1,0 +1,28 @@
+[gd_scene load_steps=8 format=3 uid="uid://astrosmash_main_01"]
+
+[ext_resource type="Script" path="res://scripts/core/main_game.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/core/game_manager.gd" id="2_gm"]
+[ext_resource type="Script" path="res://scripts/network/embedded_server.gd" id="3_srv"]
+[ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="4_arena"]
+[ext_resource type="PackedScene" path="res://scenes/ball.tscn" id="5_ball"]
+[ext_resource type="PackedScene" path="res://scenes/vehicle.tscn" id="6_veh"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="7_hud"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("2_gm")
+
+[node name="EmbeddedServer" type="Node" parent="."]
+script = ExtResource("3_srv")
+
+[node name="Arena" parent="." instance=ExtResource("4_arena")]
+
+[node name="Ball" parent="." instance=ExtResource("5_ball")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Vehicle" parent="." instance=ExtResource("6_veh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 35)
+
+[node name="TacticalHUD" parent="." instance=ExtResource("7_hud")]

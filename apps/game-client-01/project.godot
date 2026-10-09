@@ -1,0 +1,31 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; but for non-GUI projects or automated generation it can be written.
+
+config_version=5
+
+[application]
+
+config/name="Astro-Smash: Arena"
+config/description="3v3 physics sports brawler using Magnus curve aerodynamics and WebRTC P2P"
+config/version="1.0.0"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[physics]
+
+common/physics_ticks_per_second=60
+common/max_physics_steps_per_frame=8
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.web="gl_compatibility"

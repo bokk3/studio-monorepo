@@ -1,0 +1,108 @@
+[gd_scene load_steps=12 format=3 uid="uid://astrosmash_arena_01"]
+
+[ext_resource type="Script" path="res://scripts/core/goal_detector.gd" id="1_goal"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Floor"]
+albedo_color = Color(0.08, 0.08, 0.1, 1)
+metallic = 0.5
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="Mesh_Floor"]
+material = SubResource("Mat_Floor")
+size = Vector3(50, 1, 100)
+
+[sub_resource type="BoxShape3D" id="Shape_Floor"]
+size = Vector3(50, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Wall"]
+albedo_color = Color(0.05, 0.05, 0.08, 0.5)
+metallic = 0.2
+roughness = 0.8
+emission_enabled = true
+emission = Color(0, 0.4, 0.8, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="BoxMesh" id="Mesh_WallSide"]
+material = SubResource("Mat_Wall")
+size = Vector3(1, 25, 100)
+
+[sub_resource type="BoxShape3D" id="Shape_WallSide"]
+size = Vector3(1, 25, 100)
+
+[sub_resource type="BoxMesh" id="Mesh_WallEnd"]
+material = SubResource("Mat_Wall")
+size = Vector3(50, 25, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_WallEnd"]
+size = Vector3(50, 25, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_Goal"]
+size = Vector3(15, 8, 4)
+
+[node name="Arena" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("Shape_Floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("Mesh_Floor")
+
+[node name="WallLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 12.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallLeft"]
+shape = SubResource("Shape_WallSide")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallLeft"]
+mesh = SubResource("Mesh_WallSide")
+
+[node name="WallRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.5, 12.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallRight"]
+shape = SubResource("Shape_WallSide")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallRight"]
+mesh = SubResource("Mesh_WallSide")
+
+[node name="WallNorth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, -50.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth"]
+shape = SubResource("Shape_WallEnd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth"]
+mesh = SubResource("Mesh_WallEnd")
+
+[node name="WallSouth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 50.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth"]
+shape = SubResource("Shape_WallEnd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSouth"]
+mesh = SubResource("Mesh_WallEnd")
+
+[node name="GoalCyan" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -49)
+script = ExtResource("1_goal")
+defending_team_id = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GoalCyan"]
+shape = SubResource("Shape_Goal")
+
+[node name="GoalMagenta" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 49)
+script = ExtResource("1_goal")
+defending_team_id = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GoalMagenta"]
+shape = SubResource("Shape_Goal")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 20, 0)
+light_energy = 1.2
+shadow_enabled = true
