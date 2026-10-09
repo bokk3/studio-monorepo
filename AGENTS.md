@@ -29,4 +29,9 @@ These rules apply to all applications and scripts created inside `/apps`, `/pack
 - Assume players may use their smartphones as controllers.
 - Ensure all web frontends implement robust responsive design, handling orientation locks, zero-tare sensor fusion (DeviceOrientation), and haptic feedback via the Web Vibration API.
 
+## 6. Versioning & Documentation Discipline
+- **Conventional Commits:** All git commits generated or suggested by the AI must follow the Conventional Commits specification (e.g., `feat:`, `fix:`, `chore:`, `docs:`).
+- **Semantic Versioning:** Production releases should be strictly tagged using SemVer (e.g., `v1.2.4`). 
+- **Continuous Documentation:** The AI is strictly responsible for keeping the documentation in sync with the codebase. If you complete a feature, you MUST check off the task in `ROADMAP.md` and update any relevant guides inside the `docs/` folder in the same workflow step.
+
 By following these rules, you will ensure our studio remains lean, our operating costs remain near zero, and our gameplay experiences maintain AA/AAA performance standards.
