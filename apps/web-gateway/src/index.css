@@ -176,3 +176,83 @@
   animation: shwoomph-pulse 1.4s ease-out forwards;
 }
 
+/* Dust & Embers Slow Settling Animation */
+@keyframes dust-settle {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--dust-max-opacity, 0.95);
+    transform: translate(calc(var(--drift-x, 10px) * 0.25), calc(var(--fall-dist, 50px) * 0.12)) scale(1.15);
+  }
+  50% {
+    transform: translate(calc(var(--drift-x, 10px) * 0.7), calc(var(--fall-dist, 50px) * 0.52)) scale(0.95);
+    opacity: var(--dust-max-opacity, 0.8);
+  }
+  80% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate(var(--drift-x, 20px), var(--fall-dist, 70px)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.animate-dust-settle {
+  animation: dust-settle var(--dust-duration, 3.8s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Thermal Seam Cooldown */
+@keyframes thermal-cool {
+  0% {
+    stroke: #FFFFFF;
+    filter: drop-shadow(0 0 14px #FFFFFF) drop-shadow(0 0 25px #FFB800);
+    opacity: 1;
+  }
+  25% {
+    stroke: #FFB800;
+    filter: drop-shadow(0 0 10px #FF6600) drop-shadow(0 0 18px #FF0055);
+    opacity: 0.9;
+  }
+  65% {
+    stroke: #00F3FF;
+    filter: drop-shadow(0 0 6px #00F3FF);
+    opacity: 0.45;
+  }
+  100% {
+    stroke: #0055FF;
+    filter: none;
+    opacity: 0;
+  }
+}
+
+.animate-thermal-cool {
+  animation: thermal-cool 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Post-Flash Deceleration & Soft Landing */
+@keyframes logo-decelerate {
+  0% {
+    transform: translateY(-6px) scale(1.035);
+    filter: brightness(1.7) drop-shadow(0 0 60px rgba(0, 243, 255, 0.9));
+  }
+  30% {
+    transform: translateY(-2px) scale(1.018);
+    filter: brightness(1.3) drop-shadow(0 0 40px rgba(0, 243, 255, 0.5));
+  }
+  70% {
+    transform: translateY(0px) scale(1.005);
+    filter: brightness(1.06) drop-shadow(0 0 28px rgba(0, 243, 255, 0.3));
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    filter: brightness(1) drop-shadow(0 0 25px rgba(0, 243, 255, 0.25));
+  }
+}
+
+.animate-logo-decelerate {
+  animation: logo-decelerate 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+

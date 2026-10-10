@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Volume2, VolumeX, RotateCcw } from 'lucide-react';
 
 interface LaserCutLogoProps {
@@ -8,22 +8,59 @@ interface LaserCutLogoProps {
   enableAudioByDefault?: boolean;
 }
 
+interface DustParticle {
+  id: number;
+  left: number;
+  top: number;
+  size: number;
+  driftX: number;
+  fallDist: number;
+  duration: number;
+  delay: number;
+  color: string;
+  glow: string;
+  opacity: number;
+}
+
 export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
   src = "/tachyon_website_branding.png",
   alt = "Tachyon Game Studio",
   className = "",
   enableAudioByDefault = false
 }) => {
-  const [isLaserCutting, setIsLaserCutting] = useState(true);
+  // Animation Lifecycle Phases: 'cutting' -> 'flash' -> 'settle' -> 'idle'
+  const [phase, setPhase] = useState<'cutting' | 'flash' | 'settle' | 'idle'>('cutting');
   const [cutProgress, setCutProgress] = useState(0);
   const [audioEnabled, setAudioEnabled] = useState(enableAudioByDefault);
   const [shineKey, setShineKey] = useState(0);
   const [cutIteration, setCutIteration] = useState(0);
+  const [dustKey, setDustKey] = useState(0);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const shineIntervalRef = useRef<any>(null);
 
-  // Play synthesized "shwoooooomph" audio
+  // Generate 36 atmospheric dust & laser debris particles
+  const dustParticles = useMemo<DustParticle[]>(() => {
+    const colors = ['#00F3FF', '#FFB800', '#FF00FF', '#FFFFFF', '#FF6600', '#00FFB2'];
+    return Array.from({ length: 36 }).map((_, i) => {
+      const color = colors[i % colors.length];
+      return {
+        id: i,
+        left: 6 + Math.random() * 88,
+        top: 15 + Math.random() * 65,
+        size: 1 + Math.random() * 2.5,
+        driftX: (Math.random() - 0.5) * 60,
+        fallDist: 45 + Math.random() * 85,
+        duration: 3.2 + Math.random() * 2.2,
+        delay: Math.random() * 0.9,
+        color,
+        glow: color === '#FFFFFF' ? 'rgba(255,255,255,0.8)' : color,
+        opacity: 0.5 + Math.random() * 0.45
+      };
+    });
+  }, [dustKey]);
+
+  // Procedural Web Audio: Synthesized "shwoooooomph" sweep
   const playShwoomphAudio = () => {
     if (!audioEnabled || typeof window === 'undefined') return;
     try {
@@ -32,9 +69,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
         audioCtxRef.current = new AudioCtx();
       }
       const ctx = audioCtxRef.current;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
+      if (ctx.state === 'suspended') ctx.resume();
 
       const now = ctx.currentTime;
 
@@ -56,7 +91,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
       subOsc.stop(now + 0.95);
 
       // 2. Resonant Filtered Noise Whoosh (Aerodynamic wind / energy sweep)
-      const bufferSize = ctx.sampleRate * 0.9;
+      const bufferSize = Math.floor(ctx.sampleRate * 0.9);
       const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = noiseBuffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
@@ -99,12 +134,62 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
       chimeGain.connect(ctx.destination);
       chimeOsc.start(now + 0.28);
       chimeOsc.stop(now + 0.75);
-    } catch {
-      // Audio playback suspended or not permitted
-    }
+    } catch {}
   };
 
-  // Play sizzling laser cut sound during initial cut
+  // Play thermal flash pop & cooldown sizzle
+  const playFlashPop = () => {
+    if (!audioEnabled || typeof window === 'undefined') return;
+    try {
+      if (!audioCtxRef.current) {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        audioCtxRef.current = new AudioCtx();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+
+      // Snap pop
+      const popOsc = ctx.createOscillator();
+      const popGain = ctx.createGain();
+      popOsc.type = 'triangle';
+      popOsc.frequency.setValueAtTime(950, now);
+      popOsc.frequency.exponentialRampToValueAtTime(120, now + 0.15);
+      popGain.gain.setValueAtTime(0.15, now);
+      popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      popOsc.connect(popGain);
+      popGain.connect(ctx.destination);
+      popOsc.start(now);
+      popOsc.stop(now + 0.2);
+
+      // Dissipating thermal hiss
+      const bufferSize = Math.floor(ctx.sampleRate * 0.4);
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(2800, now);
+
+      const hissGain = ctx.createGain();
+      hissGain.gain.setValueAtTime(0.06, now);
+      hissGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+      whiteNoise.connect(filter);
+      filter.connect(hissGain);
+      hissGain.connect(ctx.destination);
+      whiteNoise.start(now);
+      whiteNoise.stop(now + 0.4);
+    } catch {}
+  };
+
+  // Laser cut sound during initial cut
   const playLaserCutSound = () => {
     if (!audioEnabled || typeof window === 'undefined') return;
     try {
@@ -124,8 +209,8 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
       osc.frequency.linearRampToValueAtTime(620, now + 2.4);
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.05, now + 0.1);
-      gain.gain.setValueAtTime(0.05, now + 2.2);
+      gain.gain.linearRampToValueAtTime(0.04, now + 0.1);
+      gain.gain.setValueAtTime(0.04, now + 2.2);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
 
       osc.connect(gain);
@@ -135,9 +220,13 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
     } catch {}
   };
 
-  // Laser cut sequence on mount or manual replay
+  // Phase Orchestration Sequence:
+  // 1. 'cutting' (0 - 2.4s): laser path traces
+  // 2. 'flash' (2.4s - 2.7s): bright thermal flash & pop
+  // 3. 'settle' (2.7s - 5.5s): motion slows down, thermal seam cools, dust slowly settles
+  // 4. 'idle' (5.5s+): loops 5-second 'shwoooooomph' shine
   useEffect(() => {
-    setIsLaserCutting(true);
+    setPhase('cutting');
     setCutProgress(0);
     playLaserCutSound();
 
@@ -153,9 +242,20 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
       if (p < 1) {
         animFrame = requestAnimationFrame(animateCut);
       } else {
-        setIsLaserCutting(false);
-        // Trigger initial celebratory shine!
-        playShwoomphAudio();
+        // Complete cut -> Flash stage
+        setPhase('flash');
+        playFlashPop();
+
+        // After flash (300ms), transition into the gentle deceleration & dust settling stage!
+        setTimeout(() => {
+          setPhase('settle');
+          setDustKey(k => k + 1);
+
+          // Settle phase runs for 3.0 seconds, then enters idle loop
+          setTimeout(() => {
+            setPhase('idle');
+          }, 3000);
+        }, 300);
       }
     };
 
@@ -168,6 +268,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
   useEffect(() => {
     shineIntervalRef.current = setInterval(() => {
       setShineKey(prev => prev + 1);
+      setDustKey(prev => prev + 1); // Disperse fresh wave of luminous micro-dust!
       playShwoomphAudio();
     }, 5000);
 
@@ -176,18 +277,12 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
     };
   }, [audioEnabled]);
 
-  // Restart laser cut animation
   const handleReplayCut = () => {
     setCutIteration(prev => prev + 1);
   };
 
-  // Calculate laser cutter head coordinates based on progress (0 to 1) along faceted border
-  // Aspect ratio roughly 1000 x 560
+  // Calculate laser cutter head coordinates along faceted border (1000 x 560 aspect)
   const getLaserHeadPosition = (p: number) => {
-    // 8-point faceted polygon perimeter
-    // Points:
-    // P0: (60, 20) -> P1: (940, 20) -> P2: (980, 60) -> P3: (980, 500)
-    // P4: (940, 540) -> P5: (60, 540) -> P6: (20, 500) -> P7: (20, 60) -> P0
     const points = [
       { x: 60, y: 20 },
       { x: 940, y: 20 },
@@ -230,27 +325,32 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
 
   return (
     <div className={`relative flex items-center justify-center select-none group ${className}`}>
-      {/* Outer Glow Backdrop */}
+      {/* Outer Glow Aura Backdrop */}
       <div 
         key={`glow-${shineKey}`} 
         className="absolute inset-0 rounded-3xl bg-neon-cyan/15 blur-[60px] pointer-events-none transition-all duration-700 -z-10 animate-shwoomph-pulse" 
       />
 
-      {/* Main Logo Container */}
-      <div className="relative w-full max-w-[640px] flex items-center justify-center p-2 rounded-2xl overflow-hidden">
-        
-        {/* The Exact Logo Artwork (Kept 100% Unaltered As Requested) */}
+      {/* Main Logo Container with Post-Flash Deceleration */}
+      <div 
+        className={`relative w-full max-w-[640px] flex items-center justify-center p-2 rounded-2xl overflow-hidden ${
+          phase === 'settle' ? 'animate-logo-decelerate' : ''
+        }`}
+      >
+        {/* The Exact Logo Artwork (Kept 100% Unaltered) */}
         <img 
           src={src} 
           alt={alt} 
-          className={`w-full h-auto object-contain transition-all duration-500 drop-shadow-[0_0_35px_rgba(0,243,255,0.25)] ${
-            isLaserCutting 
+          className={`w-full h-auto object-contain transition-all duration-700 drop-shadow-[0_0_35px_rgba(0,243,255,0.25)] ${
+            phase === 'cutting' 
               ? 'brightness-90 contrast-125' 
+              : phase === 'flash'
+              ? 'brightness-200 contrast-150 drop-shadow-[0_0_60px_rgba(255,255,255,0.9)]'
               : 'hover:drop-shadow-[0_0_50px_rgba(0,243,255,0.5)]'
           }`}
           style={{
-            // When laser cutting, reveal proportionally
-            clipPath: isLaserCutting 
+            // Reveal progressively during cut
+            clipPath: phase === 'cutting' 
               ? `polygon(0% 0%, 100% 0%, 100% ${Math.max(10, cutProgress * 110)}%, 0% ${Math.max(10, cutProgress * 110)}%)` 
               : 'none'
           }}
@@ -259,7 +359,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
         {/* ============================================================== */}
         {/* STAGE 1: LASER CUT OVERLAY (Line trace & high-energy sparks)    */}
         {/* ============================================================== */}
-        {isLaserCutting && (
+        {phase === 'cutting' && (
           <svg 
             viewBox="0 0 1000 560" 
             className="absolute inset-0 w-full h-full pointer-events-none z-30"
@@ -276,7 +376,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
               </filter>
             </defs>
 
-            {/* Incandescent Hot Cutting Seam Path */}
+            {/* Glowing Cut Seam Path */}
             <path 
               d="M 60 20 L 940 20 L 980 60 L 980 500 L 940 540 L 60 540 L 20 500 L 20 60 Z"
               fill="none"
@@ -288,7 +388,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-            {/* White-Hot Core of Cut Line */}
+            {/* White-Hot Core Line */}
             <path 
               d="M 60 20 L 940 20 L 980 60 L 980 500 L 940 540 L 60 540 L 20 500 L 20 60 Z"
               fill="none"
@@ -299,16 +399,13 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
               strokeLinecap="round"
             />
 
-            {/* Glowing Laser Cutting Head (Traveling Plasma Torch) */}
+            {/* Glowing Laser Cutting Head (Torch) */}
             <g transform={`translate(${laserHead.x}, ${laserHead.y})`}>
-              {/* Outer Energy Halo */}
               <circle cx="0" cy="0" r="18" fill="rgba(0, 243, 255, 0.45)" filter="url(#laser-flame)" />
-              {/* Mid Core (Neon Magenta/Cyan Fusion) */}
               <circle cx="0" cy="0" r="8" fill="#FF00FF" />
-              {/* Ultra-Hot White Plasma Core */}
               <circle cx="0" cy="0" r="4.5" fill="#FFFFFF" />
 
-              {/* Dynamic Flying Spark Particles */}
+              {/* Sparks emitting from torch */}
               <line x1="0" y1="0" x2="-14" y2="-12" stroke="#FFB800" strokeWidth="2" opacity="0.9" strokeLinecap="round" />
               <line x1="0" y1="0" x2="16" y2="-15" stroke="#FFFFFF" strokeWidth="1.8" opacity="0.95" strokeLinecap="round" />
               <line x1="0" y1="0" x2="-8" y2="18" stroke="#00F3FF" strokeWidth="2.2" opacity="0.85" strokeLinecap="round" />
@@ -319,9 +416,60 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
         )}
 
         {/* ============================================================== */}
-        {/* STAGE 2: 5-SECOND RECURRING "SHWOOOOOOMPH" SHINE SWEEP          */}
+        {/* STAGE 2: THERMAL FLASH & SLOW COOLDOWN SEAM                     */}
         {/* ============================================================== */}
-        {!isLaserCutting && (
+        {phase === 'flash' && (
+          <div className="absolute inset-0 bg-white/35 backdrop-blur-[2px] pointer-events-none z-40 animate-pulse transition-opacity duration-300" />
+        )}
+
+        {phase === 'settle' && (
+          <svg 
+            viewBox="0 0 1000 560" 
+            className="absolute inset-0 w-full h-full pointer-events-none z-30"
+          >
+            {/* The incandescent seam gradually cools down from white-amber to neon to dark */}
+            <path 
+              d="M 60 20 L 940 20 L 980 60 L 980 500 L 940 540 L 60 540 L 20 500 L 20 60 Z"
+              fill="none"
+              strokeWidth="2.5"
+              className="animate-thermal-cool"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+
+        {/* ============================================================== */}
+        {/* STAGE 3: GLOWING DUST & EMBERS SETTLING SLOWLY                 */}
+        {/* ============================================================== */}
+        {(phase === 'settle' || phase === 'idle') && (
+          <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
+            {dustParticles.map((p) => (
+              <div
+                key={`dust-${dustKey}-${p.id}`}
+                className="absolute rounded-full animate-dust-settle pointer-events-none"
+                style={{
+                  left: `${p.left}%`,
+                  top: `${p.top}%`,
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  backgroundColor: p.color,
+                  boxShadow: `0 0 ${p.size * 3}px ${p.glow}`,
+                  '--drift-x': `${p.driftX}px`,
+                  '--fall-dist': `${p.fallDist}px`,
+                  '--dust-duration': `${p.duration}s`,
+                  '--dust-max-opacity': p.opacity,
+                  animationDelay: `${p.delay}s`
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ============================================================== */}
+        {/* STAGE 4: 5-SECOND RECURRING "SHWOOOOOOMPH" SHINE SWEEP          */}
+        {/* ============================================================== */}
+        {phase === 'idle' && (
           <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl z-20">
             {/* Luminous Specular Sheen Beam Sweeping Across Logo Every 5s */}
             <div 
@@ -351,7 +499,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
           </div>
         )}
 
-        {/* Interactive Controls Overlay (Sound Toggle & Laser Re-cut Button) */}
+        {/* Interactive Controls Overlay */}
         <div className="absolute bottom-2 right-2 flex items-center gap-1.5 z-40 opacity-70 group-hover:opacity-100 transition-opacity bg-black/70 backdrop-blur-md px-2 py-1 rounded-xl border border-slate-800 text-[10px] font-mono">
           <button
             onClick={() => {
@@ -373,7 +521,7 @@ export const LaserCutLogo: React.FC<LaserCutLogoProps> = ({
             className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
             title="Replay Laser Cut Animation"
           >
-            <RotateCcw size={11} className={isLaserCutting ? "animate-spin text-neon-cyan" : ""} />
+            <RotateCcw size={11} className={phase === 'cutting' ? "animate-spin text-neon-cyan" : ""} />
             <span>CUT</span>
           </button>
         </div>
