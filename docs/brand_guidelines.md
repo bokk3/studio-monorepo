@@ -106,13 +106,26 @@ Every game in the Tachyon ecosystem shares this dark-canvas substrate:
 - **Display & Headlines:** Sleek, high-tech sans-serif with wide letter-spacing (`Inter`, `Segoe UI`, `SF Pro Display`).
 - **Telemetry & Technical HUD:** Precision monospaced fonts (`JetBrains Mono`, `ui-monospace`, `SFMono-Regular`).
 
-## 6. High-Res Branding Assets
+## 6. High-Res Branding Assets (Strictly Transparent - Zero Grid Policy)
 
-High-resolution transparent assets generated for website hero sections and primary logos.
+All assets comply strictly with Section 4 of `AGENTS.md`: authored in transparent vector (`.svg`) or 32-bit RGBA (`.png`) with zero background grid or bounding box.
 
-### 6.1 Tachyon High-Res Logo
-![Tachyon High-Res Logo](./assets/tachyon_logo_highres.png)
+### 6.1 Tachyon Full Vector Brandmark (Primary Web & Print)
+- **Vector SVG:** `docs/assets/tachyon_logo_full.svg`
+- **Transparent PNG:** `docs/assets/tachyon_logo_full.png`
 
-### 6.2 Website Branding Hero
+![Tachyon Full Brandmark](./assets/tachyon_logo_full.svg)
+
+### 6.2 Tachyon High-Res Emblem Icon
+- **Vector SVG:** `docs/assets/tachyon_mark.svg`
+- **Transparent PNG:** `docs/assets/tachyon_logo_highres.png`
+
+![Tachyon Emblem](./assets/tachyon_logo_highres.png)
+
+### 6.3 Website Branding Hero Lockup
+- **Vector SVG Banner:** `docs/assets/tachyon_banner.svg`
+- **Transparent PNG:** `docs/assets/tachyon_website_branding.png`
+
 ![Website Branding Header](./assets/tachyon_website_branding.png)
+
 
