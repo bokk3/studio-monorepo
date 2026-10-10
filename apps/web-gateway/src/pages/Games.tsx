@@ -64,6 +64,35 @@ export default function Games() {
       actionHref: "/arena"
     },
     {
+      id: 'tachyon-strike',
+      title: "Tachyon: Strike",
+      type: "Web F2P",
+      status: "CQB Alpha (Playable)",
+      iconSrc: "/tachyon_icon_web.svg",
+      conceptArt: "/tachyon_concept_arena.png",
+      tagline: "Ultra-Realistic 3D CQB Shooter",
+      description: "High-fidelity tactical first-person combat running directly in the browser. Features procedural weapon sway & recoil, physical ADS alignment, reactive steel poppers, PEQ-15 tactical laser sight, and Gen-3 Night Vision / FLIR thermal optics.",
+      badges: ["Babylon.js PBR", "Procedural Kinematics", "Physical Ballistics", "Night Vision / FLIR"],
+      specs: [
+        { label: "Target Platform", value: "Any Modern Browser (WebGL 2.0 / WebGPU)" },
+        { label: "Optics Engine", value: "Procedural ADS + Gen-3 NVG + FLIR Thermal" },
+        { label: "Weapon System", value: "Suppressed 5.56x45mm + PEQ-15 Laser" }
+      ],
+      themeColor: "text-emerald-400",
+      borderColor: "border-emerald-500/40 hover:border-emerald-400",
+      glowColor: "shadow-[0_0_30px_rgba(16,255,120,0.15)] hover:shadow-[0_0_40px_rgba(16,255,120,0.35)]",
+      badgeVariant: "cyan",
+      buttonVariant: "cyan",
+      palette: [
+        { name: "Phosphor NVG", hex: "#00FF66", bg: "bg-[#00FF66]" },
+        { name: "Thermal FLIR", hex: "#FF8800", bg: "bg-[#FF8800]" },
+        { name: "Gunmetal", hex: "#1E2228", bg: "bg-[#1E2228]" }
+      ],
+      details: "Rendered via Babylon.js PBR materials with ACES Filmic tone mapping, Screen-Space Post-Processing, dynamic muzzle lighting, and reactive hitboxes.",
+      actionText: "Deploy Strike (Play Live)",
+      actionHref: "/strike"
+    },
+    {
       id: 'orbit-runner',
       title: "Orbit Runner: Gyro Dash",
       type: "Mobile F2P",
