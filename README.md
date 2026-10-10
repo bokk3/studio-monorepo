@@ -27,11 +27,14 @@
 
 ## 🎨 Transparent Brand Assets & Visual Identity
 
-All official studio marks are maintained strictly in **100% transparent vector (SVG)** and **32-bit RGBA (PNG)** formats:
+All official studio marks and artwork are maintained strictly in **100% transparent vector (SVG)** and **32-bit RGBA (PNG)** formats with zero background grid or bounding box:
 
+- **Branding Hero Graphic:** [`docs/assets/tachyon_website_branding.png`](docs/assets/tachyon_website_branding.png) (Full 32-bit alpha transparency)
+- **High-Res 3D Emblem:** [`docs/assets/tachyon_logo_highres.png`](docs/assets/tachyon_logo_highres.png) (1024x1024 transparent isometric emblem)
 - **Full Vector Logo:** [`docs/assets/tachyon_logo_full.svg`](docs/assets/tachyon_logo_full.svg) | [PNG](docs/assets/tachyon_logo_full.png)
 - **Primary Emblem:** [`docs/assets/tachyon_mark.svg`](docs/assets/tachyon_mark.svg) | [PNG](docs/assets/tachyon_mark.png)
 - **Studio Banner:** [`docs/assets/tachyon_banner.svg`](docs/assets/tachyon_banner.svg)
+- **Gameplay Silhouettes:** [Fighter Interceptor](docs/assets/tachyon_fighter_concept.svg) · [Sentry Drone](docs/assets/tachyon_drone_concept.svg) · [Magnus Plasma Core](docs/assets/tachyon_ball_concept.svg)
 - **Category Badges:** [Web F2P](docs/assets/tachyon_icon_web.svg) · [Mobile F2P](docs/assets/tachyon_icon_mobile.svg) · [AAA Premium](docs/assets/tachyon_icon_aaa.svg)
 - **Brand Book:** Read the complete [Tachyon Brand Guidelines](docs/brand_guidelines.md).
 

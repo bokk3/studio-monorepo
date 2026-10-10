@@ -128,4 +128,19 @@ All assets comply strictly with Section 4 of `AGENTS.md`: authored in transparen
 
 ![Website Branding Header](./assets/tachyon_website_branding.png)
 
+### 6.4 Concept Art & Gameplay Silhouette Assets
+- **Tachyon Fighter Interceptor:** [`docs/assets/tachyon_fighter_concept.svg`](./assets/tachyon_fighter_concept.svg) | [`docs/assets/tachyon_fighter_concept.png`](./assets/tachyon_fighter_concept.png)
+- **Tachyon Combat Sentry Drone:** [`docs/assets/tachyon_drone_concept.svg`](./assets/tachyon_drone_concept.svg) | [`docs/assets/tachyon_drone_concept.png`](./assets/tachyon_drone_concept.png)
+- **Tachyon Magnus Core Ball:** [`docs/assets/tachyon_ball_concept.svg`](./assets/tachyon_ball_concept.svg) | [`docs/assets/tachyon_ball_concept.png`](./assets/tachyon_ball_concept.png)
+- **Cybernetic Zero-G Arena:** [`docs/assets/tachyon_concept_arena.png`](./assets/tachyon_concept_arena.png)
+
+<p align="center">
+  <img src="./assets/tachyon_fighter_concept.svg" width="160" alt="Fighter" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./assets/tachyon_drone_concept.svg" width="160" alt="Drone" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./assets/tachyon_ball_concept.svg" width="160" alt="Ball" />
+</p>
+
+
 
