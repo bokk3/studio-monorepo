@@ -1,453 +1,407 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Smartphone, 
-  Zap, 
-  Crosshair, 
-  RotateCcw, 
+  Settings, 
+  Maximize2, 
   Volume2, 
   VolumeX, 
-  Activity, 
-  Compass, 
-  Radio, 
-  Flame
+  Radio
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ThrottleQuadrant } from '@/components/hotas/ThrottleQuadrant';
+import { AttitudeHorizon } from '@/components/hotas/AttitudeHorizon';
+import { FireControl } from '@/components/hotas/FireControl';
+import { HotasTelemetry } from '@/components/hotas/HotasTelemetry';
+import { HotasSettingsModal, type HotasSettings } from '@/components/hotas/HotasSettingsModal';
+import { hotasAudio } from '@/components/hotas/hotasAudio';
 
 export default function Controller() {
+  // Flight Dynamics State
   const [pitch, setPitch] = useState(0);
   const [roll, setRoll] = useState(0);
+  const [yaw, setYaw] = useState(0);
   const [throttle, setThrottle] = useState(50);
+  const [boostActive, setBoostActive] = useState(false);
+  const [rcsState, setRcsState] = useState({ up: false, down: false, left: false, right: false });
+
+  // Tare / Zero-Lock Calibration Offsets
   const [tarePitch, setTarePitch] = useState(0);
   const [tareRoll, setTareRoll] = useState(0);
+  const [tareYaw, setTareYaw] = useState(0);
   const [hasGyro, setHasGyro] = useState(false);
-  const [boostActive, setBoostActive] = useState(false);
-  const [vibrateSupported, setVibrateSupported] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [statusMsg, setStatusMsg] = useState("Calibrated & Ready");
+
+  // Combat State
+  const [heatLevel, setHeatLevel] = useState(10);
   const [shotsFired, setShotsFired] = useState(0);
-  const [heatLevel, setHeatLevel] = useState(12);
 
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  // Networking & Telemetry State
+  const [roomCode, setRoomCode] = useState("TACHYON-7492");
+  const [isConnected, setIsConnected] = useState(false);
+  const [packetCount, setPacketCount] = useState(0);
+  const [packetHz, setPacketHz] = useState(60);
+  const [latencyMs] = useState(2);
+  const [rawFrameHex, setRawFrameHex] = useState("");
 
-  // Play synthesized HUD audio cues
-  const playSfx = (freq: number, type: OscillatorType = 'sine', duration: number = 0.08, endFreq?: number) => {
-    if (!soundEnabled || typeof window === 'undefined') return;
-    try {
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-      }
-      const ctx = audioCtxRef.current;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      if (endFreq) {
-        osc.frequency.exponentialRampToValueAtTime(endFreq, ctx.currentTime + duration);
-      }
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + duration);
-    } catch {
-      // Audio context restricted until user gesture
-    }
-  };
+  // Settings & Avionics Modal
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState<HotasSettings>({
+    invertPitch: false,
+    invertRoll: false,
+    sensitivity: 1.0,
+    deadzone: 1,
+    smoothing: 0.8,
+    isMuted: false,
+    wakeLockActive: false
+  });
 
+  const wakeLockRef = useRef<any>(null);
+  const seqNumRef = useRef<number>(0);
+  const packetsLastSec = useRef<number>(0);
+  const lastSecTime = useRef<number>(performance.now());
+  const fireActiveRef = useRef<boolean>(false);
+
+  // 16-Byte Send Buffer
+  const sendBuffer = useRef(new ArrayBuffer(16));
+  const floatView = useRef(new Float32Array(sendBuffer.current));
+  const uint8View = useRef(new Uint8Array(sendBuffer.current));
+  const uint16View = useRef(new Uint16Array(sendBuffer.current));
+
+  // Gyro smoothing refs
+  const smoothedPitch = useRef(0);
+  const smoothedRoll = useRef(0);
+
+  // Hardware Gyroscope Integration
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
-      setVibrateSupported(true);
-    }
-
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta !== null && e.gamma !== null) {
         setHasGyro(true);
-        // Normalize degrees relative to tare
-        const rawPitch = Math.max(-45, Math.min(45, (e.beta || 0) - tarePitch));
-        const rawRoll = Math.max(-45, Math.min(45, (e.gamma || 0) - tareRoll));
-        setPitch(Number(rawPitch.toFixed(1)));
-        setRoll(Number(rawRoll.toFixed(1)));
+
+        // Raw angles relative to tare
+        let rawP = (e.beta || 0) - tarePitch;
+        let rawR = (e.gamma || 0) - tareRoll;
+        let rawY = (e.alpha || 0) - tareYaw;
+
+        // Apply deadzone
+        if (Math.abs(rawP) < settings.deadzone) rawP = 0;
+        if (Math.abs(rawR) < settings.deadzone) rawR = 0;
+
+        // Apply sensitivity & inversion
+        if (settings.invertPitch) rawP = -rawP;
+        if (settings.invertRoll) rawR = -rawR;
+        rawP *= settings.sensitivity;
+        rawR *= settings.sensitivity;
+
+        // Clamping to standard cockpit attitude limits (-60 to +60)
+        rawP = Math.max(-60, Math.min(60, rawP));
+        rawR = Math.max(-60, Math.min(60, rawR));
+
+        // Low-pass exponential smoothing
+        smoothedPitch.current = smoothedPitch.current * (1 - settings.smoothing) + rawP * settings.smoothing;
+        smoothedRoll.current = smoothedRoll.current * (1 - settings.smoothing) + rawR * settings.smoothing;
+
+        setPitch(Number(smoothedPitch.current.toFixed(1)));
+        setRoll(Number(smoothedRoll.current.toFixed(1)));
+        setYaw(Number(rawY.toFixed(1)));
       }
     };
 
     window.addEventListener('deviceorientation', handleOrientation);
     return () => window.removeEventListener('deviceorientation', handleOrientation);
-  }, [tarePitch, tareRoll]);
+  }, [tarePitch, tareRoll, tareYaw, settings]);
 
-  // Heat cooldown loop
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setHeatLevel(prev => Math.max(5, prev - 3));
-    }, 400);
-    return () => clearInterval(timer);
-  }, []);
+  // Zero-Lock Horizon Tare
+  const handleTare = useCallback(() => {
+    setTarePitch(prev => prev + pitch);
+    setTareRoll(prev => prev + roll);
+    setTareYaw(prev => prev + yaw);
+  }, [pitch, roll, yaw]);
 
-  const handleTare = () => {
-    setTarePitch(pitch + tarePitch);
-    setTareRoll(roll + tareRoll);
-    setStatusMsg("Horizon Re-Zeroed");
-    playSfx(880, 'sine', 0.12, 1320);
-    if (vibrateSupported) navigator.vibrate(40);
-    setTimeout(() => setStatusMsg("Calibrated & Ready"), 1500);
-  };
-
+  // Request Gyroscope permission (iOS 13+)
   const requestGyroPermission = () => {
     if (typeof (DeviceOrientationEvent as any)?.requestPermission === 'function') {
       (DeviceOrientationEvent as any).requestPermission()
         .then((res: string) => {
           if (res === 'granted') {
             setHasGyro(true);
-            setStatusMsg("Sensors Online");
-            playSfx(1050, 'triangle', 0.15);
+            hotasAudio.playTareChime();
           }
         })
         .catch(console.error);
     }
   };
 
-  const handleFire = () => {
-    setShotsFired(prev => prev + 1);
-    setHeatLevel(prev => Math.min(100, prev + 14));
-    playSfx(920, 'sawtooth', 0.06, 220);
-    if (vibrateSupported) navigator.vibrate([25, 20, 25]);
+  // Fullscreen & Orientation Lock
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      try {
+        if ('orientation' in screen && (screen.orientation as any).lock) {
+          (screen.orientation as any).lock('landscape').catch(() => {});
+        }
+      } catch {}
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
   };
 
-  const handleBoostStart = () => {
-    setBoostActive(true);
-    playSfx(140, 'triangle', 0.3, 380);
-    if (vibrateSupported) navigator.vibrate(70);
+  // Screen Wake-Lock API
+  const toggleWakeLock = async () => {
+    if ('wakeLock' in navigator) {
+      try {
+        if (!wakeLockRef.current) {
+          wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
+          setSettings(prev => ({ ...prev, wakeLockActive: true }));
+        } else {
+          await wakeLockRef.current.release();
+          wakeLockRef.current = null;
+          setSettings(prev => ({ ...prev, wakeLockActive: false }));
+        }
+      } catch {
+        setSettings(prev => ({ ...prev, wakeLockActive: false }));
+      }
+    }
   };
 
-  const handleBoostEnd = () => {
-    setBoostActive(false);
-  };
+  // High-frequency 60Hz Telemetry Binary Pack loop
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Pack 16-Byte Binary Frame
+      // Byte 0-3: Pitch (Float32)
+      floatView.current[0] = pitch;
+      // Byte 4-7: Roll (Float32)
+      floatView.current[1] = roll;
+      // Byte 8-11: Throttle (Float32)
+      floatView.current[2] = boostActive ? 100 : throttle;
+
+      // Byte 12: Bitmask for buttons
+      let bitmask = 0;
+      if (fireActiveRef.current) bitmask |= (1 << 0);
+      if (boostActive) bitmask |= (1 << 1);
+      if (rcsState.up) bitmask |= (1 << 2);
+      if (rcsState.down) bitmask |= (1 << 3);
+      if (rcsState.left) bitmask |= (1 << 4);
+      if (rcsState.right) bitmask |= (1 << 5);
+      uint8View.current[12] = bitmask;
+
+      // Byte 13: Power Mode (0: Standard, 1: Overdrive)
+      uint8View.current[13] = boostActive ? 1 : 0;
+
+      // Bytes 14-15: Sequence Number (Uint16)
+      seqNumRef.current = (seqNumRef.current + 1) % 65536;
+      uint16View.current[7] = seqNumRef.current;
+
+      setPacketCount(seqNumRef.current);
+
+      // Convert buffer to hex preview string
+      const hexParts: string[] = [];
+      const u8 = uint8View.current;
+      for (let i = 0; i < 16; i++) {
+        hexParts.push(u8[i].toString(16).padStart(2, '0').toUpperCase());
+      }
+      setRawFrameHex(hexParts.join(' '));
+
+      // Calculate real Hz
+      packetsLastSec.current++;
+      const now = performance.now();
+      if (now - lastSecTime.current >= 1000) {
+        setPacketHz(packetsLastSec.current);
+        packetsLastSec.current = 0;
+        lastSecTime.current = now;
+      }
+    }, 1000 / 60);
+
+    return () => clearInterval(interval);
+  }, [pitch, roll, throttle, boostActive, rcsState]);
+
+  // Desktop Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement) return;
+      if (e.key === 'w' || e.key === 'W') {
+        setThrottle(prev => Math.min(100, prev + 5));
+      } else if (e.key === 's' || e.key === 'S') {
+        setThrottle(prev => Math.max(0, prev - 5));
+      } else if (e.key === ' ') {
+        fireActiveRef.current = true;
+        setShotsFired(prev => prev + 1);
+        setHeatLevel(prev => Math.min(100, prev + 10));
+        hotasAudio.playKineticShot();
+      } else if (e.key === 'Shift') {
+        setBoostActive(true);
+      } else if (e.key === 't' || e.key === 'T') {
+        handleTare();
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === ' ') fireActiveRef.current = false;
+      if (e.key === 'Shift') setBoostActive(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [handleTare]);
+
+  // Dynamic G-Force calculation
+  const gForce = 1.0 + Math.abs(pitch) * 0.04 + (boostActive ? 1.8 : 0);
 
   return (
-    <div className="min-h-screen p-4 sm:p-8 max-w-5xl mx-auto flex flex-col justify-between select-none">
-      {/* Top Telemetry Header */}
-      <div className="border-b border-slate-800 pb-4 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="min-h-screen p-2 sm:p-5 max-w-[1600px] mx-auto flex flex-col justify-between select-none touch-none bg-obsidian text-white">
+      {/* Top Cockpit Telemetry Bar */}
+      <div className="flex items-center justify-between border-b border-slate-800/90 pb-2 mb-3 font-mono">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-neon-cyan/15 border border-neon-cyan/40 flex items-center justify-center text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.25)]">
+            <Smartphone size={18} />
+          </div>
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse shadow-[0_0_8px_#00F3FF]" />
-              <span className="text-[10px] font-mono tracking-widest text-neon-cyan uppercase">
-                TACHYON TELEMETRY BUS // PROTOCOL V1.2
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] tracking-widest text-neon-cyan uppercase font-bold">
+                TACHYON MOBILE HOTAS
               </span>
-            </div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-2">
-              <Smartphone size={22} className="text-neon-cyan" />
-              HOTAS Cockpit Companion
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            <Badge 
-              variant={hasGyro ? "default" : "secondary"}
-              className="gap-1.5 font-mono text-[11px] py-1 px-3"
-            >
-              <Radio size={12} className={hasGyro ? "text-neon-cyan animate-pulse" : "text-amber-400"} />
-              GYRO: {hasGyro ? "HARDWARE ONLINE" : "DESKTOP SIMULATOR"}
-            </Badge>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setSoundEnabled(!soundEnabled);
-                if (!soundEnabled) playSfx(660, 'sine', 0.05);
-              }}
-              className="text-xs font-mono h-8 border-slate-800 text-slate-300 hover:text-white"
-            >
-              {soundEnabled ? (
-                <>
-                  <Volume2 size={14} className="text-neon-cyan mr-1.5" />
-                  SFX ON
-                </>
-              ) : (
-                <>
-                  <VolumeX size={14} className="text-slate-500 mr-1.5" />
-                  MUTED
-                </>
-              )}
-            </Button>
-
-            {!hasGyro && typeof (DeviceOrientationEvent as any)?.requestPermission === 'function' && (
-              <Button 
-                onClick={requestGyroPermission}
-                size="sm"
-                className="bg-neon-cyan text-black font-mono text-xs font-bold hover:bg-neon-cyan/90 h-8"
-              >
-                Enable Gyro
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Cockpit Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto">
-        {/* Left: Throttle Quadrant (col-span-3) */}
-        <Card className="lg:col-span-3 border-slate-800/90 bg-slate-950/70 flex flex-col justify-between p-4 sm:p-6">
-          <CardHeader className="p-0 pb-3 text-center">
-            <span className="text-[10px] font-mono text-slate-400 tracking-wider uppercase block">
-              AXIS 03 // VECTOR
-            </span>
-            <CardTitle className="text-sm font-mono text-white flex items-center justify-center gap-1.5">
-              <Flame size={14} className={throttle > 75 ? "text-neon-magenta animate-pulse" : "text-neon-cyan"} />
-              THRUST QUADRANT
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent className="p-0 flex flex-col items-center justify-center my-4">
-            <div className="h-56 flex items-center justify-center my-2 relative">
-              {/* Throttle Detent Markers */}
-              <div className="absolute -left-6 h-48 flex flex-col justify-between text-[9px] font-mono text-slate-500 pointer-events-none">
-                <span>100%</span>
-                <span>75%</span>
-                <span>50%</span>
-                <span>25%</span>
-                <span>0%</span>
-              </div>
-
-              <input 
-                type="range" 
-                min="0" 
-                max="100" 
-                value={throttle} 
-                onChange={(e) => {
-                  setThrottle(Number(e.target.value));
-                  if (Number(e.target.value) % 25 === 0) playSfx(440, 'sine', 0.03);
-                }}
-                className="w-48 h-3 bg-slate-900 accent-neon-cyan rounded-lg appearance-none cursor-pointer -rotate-90 shadow-[0_0_15px_rgba(0,243,255,0.2)]" 
-              />
-            </div>
-
-            <div className="w-full text-center font-mono mt-3 p-3 rounded-xl bg-black/60 border border-slate-900">
-              <span className="text-3xl font-black text-white tracking-tight">{throttle}%</span>
-              <span className="text-[10px] text-slate-500 block uppercase mt-0.5">
-                {throttle === 0 ? "IDLE / BRAKE" : throttle > 85 ? "MILITARY POWER" : "SUPERCRUISE"}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Center: Artificial Horizon & Gyro HUD (col-span-5) */}
-        <Card className="lg:col-span-5 border-neon-cyan/40 bg-slate-950/80 shadow-[0_0_30px_rgba(0,243,255,0.08)] flex flex-col justify-between p-4 sm:p-6 relative overflow-hidden">
-          <CardHeader className="p-0 pb-2">
-            <div className="flex justify-between items-center text-xs font-mono text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <Compass size={14} className="text-neon-cyan" />
-                6-DOF ATTITUDE
-              </span>
-              <Badge variant="outline" className="text-[10px] font-mono text-neon-cyan border-neon-cyan/30">
-                LCOS VIRTUAL GIMBAL
+              <Badge variant="outline" className="text-[9px] py-0 px-1.5 border-neon-cyan/30 text-neon-cyan">
+                REV 2.0
               </Badge>
             </div>
-          </CardHeader>
-
-          <CardContent className="p-0 flex flex-col items-center justify-center my-3">
-            {/* Attitude readout header */}
-            <div className="w-full flex justify-between px-3 py-1.5 rounded-lg bg-black/50 border border-slate-800 text-xs font-mono text-slate-300 mb-3">
-              <span>PITCH: <strong className="text-neon-cyan font-bold">{pitch > 0 ? `+${pitch}` : pitch}&deg;</strong></span>
-              <span>ROLL: <strong className="text-neon-magenta font-bold">{roll > 0 ? `+${roll}` : roll}&deg;</strong></span>
-            </div>
-
-            {/* Artificial Horizon Sphere / Reticle */}
-            <div className="w-52 h-52 sm:w-60 sm:h-60 rounded-full border-2 border-slate-700 bg-slate-950 relative overflow-hidden flex items-center justify-center shadow-inner">
-              {/* Sky / Ground Background Gradient reacting to pitch */}
-              <div 
-                className="absolute inset-0 transition-transform duration-75"
-                style={{
-                  transform: `translateY(${pitch * 1.8}px) rotate(${roll}deg)`
-                }}
-              >
-                {/* Upper Sky Section */}
-                <div className="h-1/2 bg-gradient-to-t from-electric-blue/20 to-transparent border-b border-neon-cyan/60" />
-                {/* Lower Ground Section */}
-                <div className="h-1/2 bg-gradient-to-b from-amber-500/10 to-transparent border-t border-amber-500/30" />
-              </div>
-
-              {/* Pitch Ladder Marks */}
-              <div 
-                className="absolute flex flex-col items-center space-y-4 pointer-events-none transition-transform duration-75"
-                style={{
-                  transform: `translateY(${pitch * 1.8}px) rotate(${roll}deg)`
-                }}
-              >
-                <div className="w-16 h-0.5 bg-neon-cyan/70 flex justify-between text-[7px] font-mono text-neon-cyan px-0.5">
-                  <span>+20</span>
-                  <span>+20</span>
-                </div>
-                <div className="w-24 h-0.5 bg-neon-cyan/90 flex justify-between text-[8px] font-mono text-neon-cyan px-1">
-                  <span>+10</span>
-                  <span>+10</span>
-                </div>
-                {/* Horizon Line */}
-                <div className="w-40 h-1 bg-neon-cyan shadow-[0_0_10px_#00F3FF]" />
-                <div className="w-24 h-0.5 bg-neon-magenta/90 flex justify-between text-[8px] font-mono text-neon-magenta px-1">
-                  <span>-10</span>
-                  <span>-10</span>
-                </div>
-                <div className="w-16 h-0.5 bg-neon-magenta/70 flex justify-between text-[7px] font-mono text-neon-magenta px-0.5">
-                  <span>-20</span>
-                  <span>-20</span>
-                </div>
-              </div>
-
-              {/* Static Flight Reticle Center */}
-              <div className="z-10 relative flex items-center justify-center pointer-events-none">
-                <div className="w-10 h-10 border border-white/60 rounded-full flex items-center justify-center">
-                  <div className="w-2 h-2 bg-neon-magenta rounded-full shadow-[0_0_8px_#FF00FF] animate-ping" />
-                  <div className="w-1.5 h-1.5 bg-white rounded-full absolute" />
-                </div>
-                {/* Reticle Wings */}
-                <div className="absolute -left-5 w-4 h-0.5 bg-white/70" />
-                <div className="absolute -right-5 w-4 h-0.5 bg-white/70" />
-                <div className="absolute -top-5 w-0.5 h-4 bg-white/70" />
-              </div>
-
-              {/* Ticks on perimeter */}
-              <div className="absolute inset-2 border border-dashed border-slate-700/50 rounded-full pointer-events-none" />
-            </div>
-
-            {/* Zero-Lock Calibration Button */}
-            <Button 
-              onClick={handleTare}
-              variant="outline"
-              className="mt-4 w-full border-neon-cyan text-neon-cyan bg-neon-cyan/10 hover:bg-neon-cyan/20 hover:text-white font-mono text-xs font-bold uppercase tracking-wider gap-2 shadow-[0_0_15px_rgba(0,243,255,0.15)] active:scale-95"
-            >
-              <RotateCcw size={14} />
-              Zero-Lock Horizon (Tare)
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Right: Weapon & Avionics Matrix (col-span-4) */}
-        <Card className="lg:col-span-4 border-slate-800/90 bg-slate-950/70 flex flex-col justify-between p-4 sm:p-6 space-y-4">
-          <CardHeader className="p-0 pb-1 text-center">
-            <span className="text-[10px] font-mono text-slate-400 tracking-wider uppercase block">
-              FIRE CONTROL // WEAPONS
+            <span className="text-[11px] font-bold text-white block">
+              6-DOF Tactical Flight Companion
             </span>
-            <CardTitle className="text-sm font-mono text-white flex items-center justify-center gap-1.5">
-              <Crosshair size={14} className="text-neon-magenta" />
-              COMBAT ACTUATORS
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent className="p-0 space-y-3">
-            {/* Primary Kinetic Trigger */}
-            <button 
-              onClick={handleFire}
-              onMouseDown={handleFire}
-              className="w-full py-5 rounded-2xl bg-gradient-to-r from-neon-magenta/20 to-purple-600/30 border-2 border-neon-magenta text-white font-mono text-sm font-black tracking-widest uppercase hover:bg-neon-magenta/40 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,0,255,0.35)] flex items-center justify-center gap-3 cursor-pointer"
-            >
-              <Crosshair size={20} className="text-neon-magenta animate-spin-slow" />
-              Primary Kinetic Fire
-            </button>
-
-            {/* Afterburner Boost Actuator */}
-            <button 
-              onMouseDown={handleBoostStart}
-              onMouseUp={handleBoostEnd}
-              onTouchStart={handleBoostStart}
-              onTouchEnd={handleBoostEnd}
-              className={`w-full py-5 rounded-2xl font-mono text-sm font-black tracking-widest uppercase transition-all flex items-center justify-center gap-3 cursor-pointer ${
-                boostActive 
-                  ? 'bg-electric-blue text-white border-2 border-white shadow-[0_0_30px_rgba(0,85,255,0.9)] scale-95' 
-                  : 'bg-electric-blue/20 border-2 border-electric-blue text-blue-200 hover:bg-electric-blue/30 shadow-[0_0_15px_rgba(0,85,255,0.25)]'
-              }`}
-            >
-              <Zap size={20} className={boostActive ? "text-white animate-pulse" : "text-electric-blue"} />
-              {boostActive ? "AFTERBURNER ENGAGED" : "Hold: Afterburner Boost"}
-            </button>
-
-            {/* Thermal Heat & Ammo Gauge */}
-            <div className="p-3 rounded-xl bg-black/60 border border-slate-900 space-y-2 font-mono text-xs">
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="text-slate-400">GUN THERMAL LOAD:</span>
-                <span className={heatLevel > 70 ? "text-rose-400 font-bold" : "text-neon-cyan font-bold"}>
-                  {heatLevel}%
-                </span>
-              </div>
-              <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full transition-all duration-200 ${heatLevel > 70 ? 'bg-rose-500' : 'bg-neon-cyan'}`} 
-                  style={{ width: `${heatLevel}%` }}
-                />
-              </div>
-
-              <div className="flex justify-between items-center text-[10px] pt-1 text-slate-500">
-                <span>SHOTS RELEASED:</span>
-                <span className="text-white font-bold">{shotsFired}</span>
-              </div>
-            </div>
-
-            {/* Haptic & Telemetry Status Box */}
-            <div className="p-3 rounded-xl bg-slate-900/50 border border-slate-800 text-[11px] font-mono text-slate-400 space-y-1.5">
-              <div className="flex justify-between items-center">
-                <span>HAPTIC VIBRATION:</span>
-                <span className={vibrateSupported ? "text-emerald-400 font-bold" : "text-slate-500"}>
-                  {vibrateSupported ? "ACTUATOR ACTIVE" : "EMULATED"}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>UPDATE RATE:</span>
-                <span className="text-neon-cyan font-bold">60Hz UNCHOKED</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Simulator Test Controls (Desktop Fallback) */}
-      {!hasGyro && (
-        <div className="mt-6 p-4 rounded-xl bg-black/50 border border-slate-800/80 font-mono text-xs">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-slate-400 uppercase text-[10px]">Desktop Simulator Controls (No Mobile Gyro Detected):</span>
-            <Badge variant="outline" className="text-[10px]">Manual Sliders</Badge>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <span className="text-[10px] text-slate-500 block mb-1">Simulate Pitch: {pitch}&deg;</span>
-              <input 
-                type="range" 
-                min="-45" 
-                max="45" 
-                value={pitch} 
-                onChange={(e) => setPitch(Number(e.target.value))}
-                className="w-full accent-neon-cyan h-1.5 bg-slate-800 rounded-lg cursor-pointer"
-              />
-            </div>
-            <div>
-              <span className="text-[10px] text-slate-500 block mb-1">Simulate Roll: {roll}&deg;</span>
-              <input 
-                type="range" 
-                min="-45" 
-                max="45" 
-                value={roll} 
-                onChange={(e) => setRoll(Number(e.target.value))}
-                className="w-full accent-neon-magenta h-1.5 bg-slate-800 rounded-lg cursor-pointer"
-              />
-            </div>
           </div>
         </div>
-      )}
 
-      {/* Footer Info */}
-      <div className="mt-6 pt-4 border-t border-slate-900 text-center font-mono text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <span className="flex items-center gap-1.5">
-          <Activity size={12} className="text-emerald-400" />
-          Status: <strong className="text-neon-cyan">{statusMsg}</strong>
-        </span>
-        <span>16-Byte WebRTC DataChannel &bull; Sub-3ms Target</span>
-        <span className="text-slate-600">PWA Manifest Ready &bull; Offline Capable</span>
+        {/* Action Controls: Sound, Fullscreen, Settings */}
+        <div className="flex items-center gap-2">
+          <Badge 
+            variant={hasGyro ? "default" : "secondary"}
+            className="hidden sm:inline-flex text-[10px] font-mono gap-1"
+          >
+            <Radio size={11} className={hasGyro ? "text-neon-cyan animate-pulse" : "text-amber-400"} />
+            {hasGyro ? "GYRO 6-DOF ONLINE" : "DESKTOP SIMULATOR"}
+          </Badge>
+
+          {!hasGyro && typeof (DeviceOrientationEvent as any)?.requestPermission === 'function' && (
+            <Button 
+              size="sm" 
+              onClick={requestGyroPermission}
+              className="h-8 px-2 text-xs bg-neon-cyan text-black font-bold"
+            >
+              Enable Gyro
+            </Button>
+          )}
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              const nextMuted = !settings.isMuted;
+              setSettings(prev => ({ ...prev, isMuted: nextMuted }));
+              hotasAudio.setMuted(nextMuted);
+              if (!nextMuted) hotasAudio.playTareChime();
+            }}
+            className="h-8 w-8 p-0 border-slate-800 text-slate-300 hover:text-white"
+            title="Toggle Web Audio SFX"
+          >
+            {settings.isMuted ? <VolumeX size={15} className="text-slate-500" /> : <Volume2 size={15} className="text-neon-cyan" />}
+          </Button>
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={toggleFullscreen}
+            className="h-8 w-8 p-0 border-slate-800 text-slate-300 hover:text-white"
+            title="Toggle Fullscreen"
+          >
+            <Maximize2 size={15} />
+          </Button>
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowSettings(true)}
+            className="h-8 px-2.5 gap-1.5 border-slate-800 text-slate-300 hover:text-white font-mono text-xs"
+          >
+            <Settings size={14} className="text-neon-cyan" />
+            <span className="hidden sm:inline">Avionics</span>
+          </Button>
+        </div>
       </div>
+
+      {/* Main Ergonomic Triple-Quadrant Cockpit */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 my-auto flex-1">
+        {/* Left Quadrant: Throttle & RCS (Col-Span 3) */}
+        <div className="lg:col-span-3 h-full">
+          <ThrottleQuadrant
+            throttle={throttle}
+            setThrottle={setThrottle}
+            boostActive={boostActive}
+            setBoostActive={setBoostActive}
+            rcsState={rcsState}
+            setRcsState={setRcsState}
+          />
+        </div>
+
+        {/* Center Quadrant: Primary Flight Display / ADI (Col-Span 5) */}
+        <div className="lg:col-span-5 h-full">
+          <AttitudeHorizon
+            pitch={pitch}
+            roll={roll}
+            yaw={yaw}
+            hasGyro={hasGyro}
+            onTare={handleTare}
+            gForce={gForce}
+            setPitch={setPitch}
+            setRoll={setRoll}
+          />
+        </div>
+
+        {/* Right Quadrant: Fire Control & Combat Actuators (Col-Span 4) */}
+        <div className="lg:col-span-4 h-full">
+          <FireControl
+            onFire={() => {
+              setShotsFired(prev => prev + 1);
+            }}
+            onMissileLaunch={() => {
+              setShotsFired(prev => prev + 1);
+              setHeatLevel(prev => Math.min(100, prev + 25));
+            }}
+            onCountermeasure={() => {}}
+            heatLevel={heatLevel}
+            setHeatLevel={setHeatLevel}
+            shotsFired={shotsFired}
+          />
+        </div>
+      </div>
+
+      {/* Bottom WebRTC Telemetry Bar */}
+      <div className="mt-3">
+        <HotasTelemetry
+          roomCode={roomCode}
+          setRoomCode={setRoomCode}
+          isConnected={isConnected}
+          packetCount={packetCount}
+          packetHz={packetHz}
+          latencyMs={latencyMs}
+          rawFrameBytes={rawFrameHex}
+          onConnect={() => {
+            setIsConnected(!isConnected);
+            hotasAudio.playTareChime();
+          }}
+        />
+      </div>
+
+      {/* Calibration & Avionics Settings Modal */}
+      <HotasSettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        settings={settings}
+        setSettings={setSettings}
+        onToggleFullscreen={toggleFullscreen}
+        onToggleWakeLock={toggleWakeLock}
+      />
     </div>
   );
 }
