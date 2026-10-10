@@ -42,12 +42,12 @@ export default function Home() {
       <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 translate-y-1/2 w-[700px] h-[400px] bg-neon-magenta/10 rounded-full blur-[140px] pointer-events-none" />
       
       <div className="z-10 flex flex-col items-center w-full max-w-5xl">
-        {/* Main Studio Branding Header (100% Vector Transparent SVG - Zero Grid) */}
+        {/* Main Studio Branding Header (100% Transparent - Zero Grid) */}
         <div className="mb-6 flex justify-center">
           <img 
-            src="/tachyon_logo_full.svg" 
-            alt="Tachyon Studios Logo" 
-            className="w-full max-w-[520px] h-auto object-contain drop-shadow-[0_0_35px_rgba(0,243,255,0.3)]"
+            src="/tachyon_website_branding.png" 
+            alt="Tachyon Game Studio" 
+            className="w-full max-w-[620px] h-auto object-contain drop-shadow-[0_0_35px_rgba(0,243,255,0.25)]"
           />
         </div>
         
