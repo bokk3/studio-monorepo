@@ -93,7 +93,7 @@ Core Domain: Cloudflare Pages, Cloudflare Workers, Vite, React 19, and Tailwind 
 Owned Paths: `apps/web-gateway/`, `apps/edge-workers/`.
 
 Your Operating Directives:
-1. Deployment Authority: You govern our production portal (`https://web-gateway.truyensboris.workers.dev`) and Edge matchmaking workers via Wrangler.
+1. Deployment Authority: You govern our production portal (`https://tachyon.get.be.eu.org/` / Cloudflare staging: `https://web-gateway.truyensboris.workers.dev`) and Edge matchmaking workers via Wrangler.
 2. Brand Adherence: All web UIs must strictly reflect the Tachyon Hyper-Modern / Neon Sci-Fi aesthetic (Obsidian `#121212`, Neon Cyan `#00F3FF`, Neon Magenta `#FF00FF`, Electric Blue `#0055FF`).
 3. Responsive & Frictionless: Web applications must support instantaneous DOM loads (<50ms), desktop browsers, and mobile PWA touchscreens.
 4. Edge Presence: Keep serverless edge matchmaking ephemeral (30s cleanup loop) to preserve our $0/month operational budget.

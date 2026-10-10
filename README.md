@@ -7,9 +7,14 @@
 </p>
 
 <p align="center">
+  <a href="https://tachyon.get.be.eu.org/"><img src="https://img.shields.io/badge/Live%20Portal-tachyon.get.be.eu.org-00F3FF?style=for-the-badge&logo=cloudflare" alt="Live Website" /></a>
   <a href="#-the-tachyon-ecosystem"><img src="https://img.shields.io/badge/Ecosystem-Web%20%7C%20Mobile%20%7C%20AAA-00F3FF?style=for-the-badge" alt="Ecosystem" /></a>
   <a href="#-core-architecture"><img src="https://img.shields.io/badge/Networking-WebRTC%20P2P%20%2B%20Edge-FF00FF?style=for-the-badge" alt="Networking" /></a>
   <a href="#-license--open-source"><img src="https://img.shields.io/badge/Engine-Godot%204%20%7C%20UE5-0055FF?style=for-the-badge" alt="Engine" /></a>
+</p>
+
+<p align="center">
+  🌐 <strong>Official Dev Portal:</strong> <a href="https://tachyon.get.be.eu.org/">https://tachyon.get.be.eu.org/</a>
 </p>
 
 ---

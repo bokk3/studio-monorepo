@@ -8,7 +8,7 @@
 *   **Studio Name:** Tachyon Studios (Tachyon Interactive)
 *   **Founded:** 2026
 *   **Operating Model:** AI-Assisted, Human-Directed Independent Game Studio
-*   **Official Website:** [https://web-gateway.truyensboris.workers.dev](https://web-gateway.truyensboris.workers.dev)
+*   **Official Website:** [https://tachyon.get.be.eu.org/](https://tachyon.get.be.eu.org/) (Dev Portal: `https://web-gateway.truyensboris.workers.dev`)
 *   **Monorepo Source:** [https://github.com/bokk3/studio-monorepo](https://github.com/bokk3/studio-monorepo)
 *   **Core Technology Stack:**
     *   *Engines:* Godot Engine 4.7 (MIT), Three.js (MIT), Unreal Engine 5
