@@ -37,17 +37,17 @@ export default function Games() {
       id: 'astro-smash',
       title: "Astro-Smash: Arena",
       type: "Web F2P",
-      status: "In Development",
+      status: "Live Alpha (Playable)",
       iconSrc: "/tachyon_icon_web.svg",
       conceptArt: "/tachyon_concept_arena.png",
       conceptBadge: "/tachyon_ball_concept.svg",
       tagline: "3v3 Aerodynamic Sports Brawler",
-      description: "Zero-download multiplayer sports combat running locked at 60Hz in your browser. Master the Magnus aerodynamic curve kicks, induced drag, and zero-GC WebRTC network synchronization.",
-      badges: ["Godot 4.7 WebGL", "WebRTC P2P", "Zero-GC Codec", "Deterministic 60Hz"],
+      description: "Zero-download multiplayer sports combat running locked at 60Hz in your browser. Master the aerodynamic hover flight, turbo afterburner boosts, kinetic shunt pulses, and Mobile HOTAS companion pairing.",
+      badges: ["Babylon.js 3D", "WebRTC HOTAS", "Procedural SFX", "Deterministic 60Hz"],
       specs: [
-        { label: "Target Platform", value: "Any Modern Browser (WebGL 2.0)" },
+        { label: "Target Platform", value: "Any Modern Browser (WebGL 2.0 / WebGPU)" },
         { label: "Network Protocol", value: "16-Byte Packed Binary via RTCDataChannel" },
-        { label: "Aerodynamics", value: "Real Magnus Effect & Induced Drag" }
+        { label: "Controls", value: "Keyboard/Mouse, Gamepad & Mobile HOTAS" }
       ],
       themeColor: "text-neon-cyan",
       borderColor: "border-neon-cyan/40 hover:border-neon-cyan",
@@ -59,9 +59,9 @@ export default function Games() {
         { name: "Velocity Mint", hex: "#00FFB2", bg: "bg-[#00FFB2]" },
         { name: "Deep Ion Blue", hex: "#0055FF", bg: "bg-[#0055FF]" }
       ],
-      details: "Leverages deterministic client-side prediction and serverless Cloudflare Workers for instant lobby matchmaking under 15ms.",
-      actionText: "Play Arena (Staging)",
-      actionHref: "#"
+      details: "Powered by Babylon.js with deterministic hover aerodynamics and zero-friction Cloudflare Workers edge distribution.",
+      actionText: "Enter Arena (Play Live)",
+      actionHref: "/arena"
     },
     {
       id: 'orbit-runner',

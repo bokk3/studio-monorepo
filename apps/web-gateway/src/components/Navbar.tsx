@@ -55,6 +55,14 @@ export default function Navbar() {
             ))}
 
             <Link
+              to="/arena"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neon-cyan/60 bg-neon-cyan/15 hover:bg-neon-cyan/30 text-neon-cyan text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-[0_0_12px_rgba(0,243,255,0.25)]"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-ping"></span>
+              PLAY ARENA
+            </Link>
+
+            <Link
               to="/controller"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neon-magenta/60 bg-neon-magenta/10 hover:bg-neon-magenta/25 text-neon-magenta text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-[0_0_10px_rgba(255,0,255,0.2)]"
             >
@@ -104,6 +112,12 @@ export default function Navbar() {
                 Enlist
               </Link>
             )}
+            <Link
+              to="/arena"
+              className="px-2 py-1 rounded bg-neon-cyan/20 border border-neon-cyan text-neon-cyan text-[11px] font-mono font-bold"
+            >
+              ARENA
+            </Link>
             <Link
               to="/controller"
               className="px-2 py-1 rounded bg-neon-magenta/20 border border-neon-magenta text-neon-magenta text-[11px] font-mono font-bold"

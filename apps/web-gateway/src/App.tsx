@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Verify from './pages/Verify';
+import Arena from './pages/Arena';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/games" element={<Games />} />
+              <Route path="/arena" element={<Arena />} />
               <Route path="/tech" element={<TechMatrix />} />
               <Route path="/about" element={<About />} />
               <Route path="/controller" element={<Controller />} />
