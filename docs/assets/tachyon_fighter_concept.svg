@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <!-- Crisp, subtle glow filter (Low-bloom) -->
+    <filter id="subtle-blue-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="b1" />
+      <feMerge>
+        <feMergeNode in="b1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <linearGradient id="fuselage-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="50%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+
+    <linearGradient id="wing-top-l" x1="0%" y1="0%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="wing-trim-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0055FF" />
+      <stop offset="100%" stop-color="#00D4FF" />
+    </linearGradient>
+
+    <linearGradient id="canopy-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE600" />
+      <stop offset="50%" stop-color="#FFB800" />
+      <stop offset="100%" stop-color="#CC8800" />
+    </linearGradient>
+
+    <linearGradient id="engine-plume" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#00D4FF" />
+      <stop offset="80%" stop-color="#0055FF" />
+      <stop offset="100%" stop-color="#0055FF" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Group: Vanguard Tactical Interceptor (100% Transparent Background) -->
+  <g transform="translate(0, 20)">
+    <!-- Engine Ion Plumes (Twin Exhausts) -->
+    <polygon points="340,430 355,540 370,430" fill="url(#engine-plume)" filter="url(#subtle-blue-glow)" opacity="0.9" />
+    <polygon points="430,430 445,540 460,430" fill="url(#engine-plume)" filter="url(#subtle-blue-glow)" opacity="0.9" />
+
+    <!-- Left Main Delta Wing -->
+    <polygon points="400,160 210,360 80,410 130,430 310,390 350,420" 
+             fill="url(#wing-top-l)" stroke="#475569" stroke-width="1.5" stroke-linejoin="round" />
+    <!-- Left Wing Leading Edge Blue Trim -->
+    <polyline points="400,160 210,360 80,410" 
+              fill="none" stroke="url(#wing-trim-blue)" stroke-width="3" stroke-linecap="round" />
+    <!-- Left Wing Flap Notch -->
+    <polygon points="160,405 240,385 240,395 160,415" fill="#0F172A" stroke="#00D4FF" stroke-width="1" />
+
+    <!-- Right Main Delta Wing -->
+    <polygon points="400,160 590,360 720,410 670,430 490,390 450,420" 
+             fill="url(#wing-top-l)" stroke="#475569" stroke-width="1.5" stroke-linejoin="round" />
+    <!-- Right Wing Leading Edge Blue Trim -->
+    <polyline points="400,160 590,360 720,410" 
+              fill="none" stroke="url(#wing-trim-blue)" stroke-width="3" stroke-linecap="round" />
+    <!-- Right Wing Flap Notch -->
+    <polygon points="640,405 560,385 560,395 640,415" fill="#0F172A" stroke="#00D4FF" stroke-width="1" />
+
+    <!-- Central Lifting Fuselage -->
+    <polygon points="400,60 445,210 435,420 400,435 365,420 355,210" 
+             fill="url(#fuselage-grad)" stroke="#64748B" stroke-width="1.8" stroke-linejoin="round" />
+
+    <!-- Forward Nose Cone Facets -->
+    <polygon points="400,60 380,150 400,180" fill="#334155" opacity="0.6" />
+    <polygon points="400,60 420,150 400,180" fill="#1E293B" opacity="0.8" />
+    <line x1="400" y1="60" x2="400" y2="180" stroke="#94A3B8" stroke-width="1.2" />
+
+    <!-- Pressurized Cockpit Canopy (Solar Amber Gold) -->
+    <polygon points="400,160 416,215 412,280 400,295 388,280 384,215" 
+             fill="url(#canopy-gold)" stroke="#FFFFFF" stroke-width="1.5" filter="url(#subtle-blue-glow)" />
+    <!-- Canopy Reflection Glint -->
+    <polygon points="398,175 410,215 404,260 398,260" fill="#FFFFFF" opacity="0.65" />
+
+    <!-- Twin Stabilizer Vertical Fins (Canting outward) -->
+    <polygon points="340,320 325,410 338,425 352,400" fill="#1E293B" stroke="#0055FF" stroke-width="1.2" />
+    <polygon points="460,320 475,410 462,425 448,400" fill="#1E293B" stroke="#0055FF" stroke-width="1.2" />
+
+    <!-- Tactical HUD Telemetry Callouts -->
+    <g font-family="'JetBrains Mono', monospace" font-size="10" fill="#64748B">
+      <circle cx="210" cy="360" r="3" fill="#00D4FF" />
+      <line x1="210" y1="360" x2="160" y2="340" stroke="#00D4FF" stroke-width="0.8" stroke-dasharray="4 2" />
+      <text x="70" y="344" fill="#94A3B8">SWEEP_ANGLE: 58°</text>
+
+      <circle cx="400" cy="60" r="3" fill="#FFB800" />
+      <line x1="400" y1="60" x2="480" y2="40" stroke="#FFB800" stroke-width="0.8" stroke-dasharray="4 2" />
+      <text x="490" y="44" fill="#FFB800">PITOT_MACH: 3.8</text>
+
+      <circle cx="445" cy="430" r="3" fill="#0055FF" />
+      <line x1="445" y1="430" x2="520" y2="460" stroke="#0055FF" stroke-width="0.8" stroke-dasharray="4 2" />
+      <text x="530" y="464" fill="#00D4FF">ION_DRIVE: 100%</text>
+    </g>
+  </g>
+</svg>
