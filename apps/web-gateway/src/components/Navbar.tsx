@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, Menu, X, Smartphone } from 'lucide-react';
+import { Activity, Menu, X, Smartphone, User, ShieldCheck } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
   const [latency, setLatency] = useState(14);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { pilot } = useAuth();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,11 +30,16 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center gap-3">
-              <img src="/tachyon_logo_full.svg" alt="Tachyon Studios" className="h-8 w-auto" onError={(e) => e.currentTarget.src = '/tachyon_logo_full.png'} />
+              <img 
+                src="/tachyon_logo_full.svg" 
+                alt="Tachyon Studios" 
+                className="h-8 w-auto" 
+                onError={(e) => e.currentTarget.src = '/tachyon_logo_full.png'} 
+              />
             </Link>
           </div>
           
-          <div className="hidden lg:flex items-center space-x-7">
+          <div className="hidden lg:flex items-center space-x-6">
             {links.map((link) => (
               <Link 
                 key={link.name} 
@@ -54,6 +61,26 @@ export default function Navbar() {
               <Smartphone size={14} />
               HOTAS PWA
             </Link>
+
+            {/* Pilot Clearance / Enlistment CTA */}
+            {pilot ? (
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-neon-cyan/40 bg-neon-cyan/10 hover:bg-neon-cyan/20 text-white text-xs font-mono font-bold tracking-wider transition-all"
+              >
+                <ShieldCheck size={14} className="text-neon-cyan" />
+                <span>{pilot.callsign}</span>
+                <span className="text-cyan-300 text-[11px]">💎 {pilot.diamondsBalance}</span>
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neon-cyan/70 bg-neon-cyan/15 hover:bg-neon-cyan/30 text-neon-cyan text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-[0_0_12px_rgba(0,243,255,0.25)]"
+              >
+                <User size={13} />
+                Enlist Pilot
+              </Link>
+            )}
             
             <div className="flex items-center space-x-2 bg-obsidian border border-electric-blue/30 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,85,255,0.15)]">
               <Activity size={13} className="text-neon-cyan animate-pulse" />
@@ -62,9 +89,24 @@ export default function Navbar() {
           </div>
 
           <div className="lg:hidden flex items-center gap-2">
+            {pilot ? (
+              <Link
+                to="/profile"
+                className="px-2 py-1 rounded bg-neon-cyan/20 border border-neon-cyan text-neon-cyan text-[11px] font-mono font-bold"
+              >
+                {pilot.callsign}
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="px-2 py-1 rounded bg-neon-cyan/20 border border-neon-cyan text-neon-cyan text-[11px] font-mono font-bold"
+              >
+                Enlist
+              </Link>
+            )}
             <Link
               to="/controller"
-              className="px-2.5 py-1 rounded bg-neon-magenta/20 border border-neon-magenta text-neon-magenta text-[11px] font-mono font-bold"
+              className="px-2 py-1 rounded bg-neon-magenta/20 border border-neon-magenta text-neon-magenta text-[11px] font-mono font-bold"
             >
               HOTAS
             </Link>
@@ -90,6 +132,23 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          {pilot ? (
+            <Link
+              to="/profile"
+              onClick={() => setIsOpen(false)}
+              className="block py-2 px-3 rounded text-white font-bold bg-neon-cyan/15 border border-neon-cyan/40"
+            >
+              Pilot Dossier ({pilot.callsign}) &bull; 💎 {pilot.diamondsBalance}
+            </Link>
+          ) : (
+            <Link
+              to="/register"
+              onClick={() => setIsOpen(false)}
+              className="block py-2 px-3 rounded text-neon-cyan font-bold bg-neon-cyan/15 border border-neon-cyan/40"
+            >
+              Enlist Single Pilot Clearance (+500 Diamonds)
+            </Link>
+          )}
           <Link 
             to="/controller"
             onClick={() => setIsOpen(false)}
