@@ -11,6 +11,7 @@ import Press from './pages/Press';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Verify from './pages/Verify';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/verify" element={<Verify />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
