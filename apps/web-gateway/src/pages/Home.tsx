@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Smartphone, Zap, Cpu, ShieldCheck } from 'lucide-react';
+import { LaserCutLogo } from '@/components/ui/LaserCutLogo';
 
 export default function Home() {
   const previews = [
@@ -42,12 +43,12 @@ export default function Home() {
       <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 translate-y-1/2 w-[700px] h-[400px] bg-neon-magenta/10 rounded-full blur-[140px] pointer-events-none" />
       
       <div className="z-10 flex flex-col items-center w-full max-w-5xl">
-        {/* Main Studio Branding Header (100% Transparent - Zero Grid) */}
-        <div className="mb-6 flex justify-center">
-          <img 
+        {/* Main Studio Branding Header with Laser Cut Tracing & 5s 'Shwoooooomph' Shine */}
+        <div className="mb-6 flex justify-center w-full">
+          <LaserCutLogo 
             src="/tachyon_website_branding.png" 
             alt="Tachyon Game Studio" 
-            className="w-full max-w-[620px] h-auto object-contain drop-shadow-[0_0_35px_rgba(0,243,255,0.25)]"
+            className="w-full max-w-[640px]"
           />
         </div>
         
