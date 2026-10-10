@@ -105,3 +105,14 @@ Every game in the Tachyon ecosystem shares this dark-canvas substrate:
 
 - **Display & Headlines:** Sleek, high-tech sans-serif with wide letter-spacing (`Inter`, `Segoe UI`, `SF Pro Display`).
 - **Telemetry & Technical HUD:** Precision monospaced fonts (`JetBrains Mono`, `ui-monospace`, `SFMono-Regular`).
+
+## 6. High-Res Branding Assets
+
+High-resolution transparent assets generated for website hero sections and primary logos.
+
+### 6.1 Tachyon High-Res Logo
+![Tachyon High-Res Logo](./assets/tachyon_logo_highres.png)
+
+### 6.2 Website Branding Hero
+![Website Branding Header](./assets/tachyon_website_branding.png)
+
