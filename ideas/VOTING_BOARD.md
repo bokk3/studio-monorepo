@@ -14,7 +14,7 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
   - *Concept:* Asynchronous auto-battler. Draft a squad of mercenaries to fight in background tournaments.
   - *Synergy:* High daily retention. Players log in to open mercenary card packs and set defenses.
 - [x] 🏆 **1B. "Astro-Smash: Arena" [OFFICIAL WINNER - WEB F2P]**
-  - *Concept:* Fast 3v3 physics brawler (top-down Rocket League) using advanced aerodynamics. 
+  - *Concept:* Fast 3v3 cybernetic vehicular sports arena brawler using advanced aerodynamics and boost-powered flight. 
   - *Synergy:* Highly competitive, monetized via cosmetic goal explosions and striker skins.
 - [ ] **1C. "Drift Miners"**
   - *Concept:* Multiplayer idle-mining and resource trading simulation. 
@@ -28,7 +28,7 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
   - *Concept:* A live multiplayer market-manipulation game. Players buy/sell galactic commodities that fluctuate based on player actions across the entire server.
   - *Synergy:* Deep economy. Earning wealth here allows players to fund giant capital ships in the AAA game.
 - [ ] **1F. "Neon-Striker: Grid Survival"**
-  - *Concept:* A modern, hyper-neon evolution of *Achtung die Kurve* with hero abilities and shrinking zones.
+  - *Concept:* A modern, hyper-neon light-trail zone survival combat game with hero abilities and shrinking boundaries.
   - *Synergy:* Fast, 2-minute matches. Highly streamable, monetized via bright neon light-trail skins.
 
 ---
@@ -55,7 +55,7 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
   - *Concept:* A fast-paced vertical swiping action game where a cyber-ninja ascends an infinitely generating mega-skyscraper.
   - *Synergy:* Fast, brutal loops. Chests drop at every 10th floor containing weapon skins and profile banners.
 - [ ] **2F. "Star-Forge: Fleet Commander"**
-  - *Concept:* Asynchronous multiplayer base defense (similar to Clash of Clans). Build an orbital space station and raid other players' fleets.
+  - *Concept:* Asynchronous multiplayer orbital base defense. Build a space station and raid other players' fleet garrisons.
   - *Synergy:* High revenue driver through speed-up mechanics (spending Diamonds to skip upgrade timers).
 
 ---
@@ -76,11 +76,11 @@ Review the pitches below and place a checkmark (or an `X`) next to your favorite
 
 ### Batch 2: New Concepts
 - [ ] **3D. "Deep-Rim: Co-op Survival Horror"**
-  - *Concept:* 4-player co-op horror. Scavenge derelict, AI-controlled space stations while avoiding terrifying alien entities. (High-fidelity *Lethal Company*).
+  - *Concept:* 4-player co-op horror. Scavenge derelict, AI-controlled space stations while avoiding terrifying alien entities with atmospheric procedural tactical survival.
   - *Synergy:* Extremely viral/streamable. Earning high survival quotas grants the entire squad ultra-rare "Horror" themed lootboxes for their mobile accounts.
 - [ ] **3E. "Aegis: Grand Fleet Director"**
   - *Concept:* A massive 4X Grand Strategy game where the player acts as the commander of the entire galaxy.
   - *Synergy:* Asymmetric gameplay—the AAA strategy player issues "Global Missions" that the Mobile and Web players actually execute on the ground to tilt the war effort.
 - [ ] **3F. "Neon Samurai: Cyber-Slash"**
-  - *Concept:* A brutal, 3rd-person character action game (in the vein of *Devil May Cry* or *Sekiro*). Deep combo systems and boss fights.
+  - *Concept:* A brutal, 3rd-person character action game featuring high-precision parries, fluid combo flow, and mechanical mastery.
   - *Synergy:* Prestige title. Beating the game on the highest difficulty permanently alters the UI of the player's web/mobile clients to a "Prestige Gold" theme, flexing their achievement to the entire ecosystem.
